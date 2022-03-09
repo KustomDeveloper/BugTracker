@@ -1,8 +1,9 @@
 const express = require("express");
-const User = require("./models");
+const User = require("./models/User");
+const Bug = require("./models/Bug");
+const Projects = require("./models/Project");
 const config = require('./config');
 const authenticateToken =  require('./AuthMiddleware');
-// const bodyParser = require('body-parser');
 const { body, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
 

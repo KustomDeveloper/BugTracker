@@ -112,21 +112,20 @@ table.status {
   width: 100%;
   background-color: #ffffff;
   border-collapse: collapse;
-  border-width: 2px;
-  border-color: #ffcc00;
-  border-style: solid;
-  color: #000000;
 }
-table.status td, table.status th {
-  border-width: 2px;
-  border-color: #eee;
-  border-style: solid;
+table.status th {
   padding: 8px;
-  font-size:16px;
+  color: #a09d9d;
+}
+table.status td {
+  padding: 8px;
+  font-size:15px;
+  color: #000;
 }
 table.status th h3 {
-  font-size:16px;
-  font-weight: 900
+  font-size:13px;
+  font-weight: 900;
+  letter-spacing: 1px;
 }
 table.status thead {
   background-color: #fff;
@@ -137,6 +136,7 @@ table.status thead {
 .col-mid {
   background-color: var(--light-purple);
   color: #916095;
+  padding-right: 0;
 }
 .col-mid h3 {
   font-size: 13px;
@@ -156,9 +156,24 @@ table.status thead {
 }
 .projects .selected {
   background: #fff;
-  border-radius: 10px;
+  border-radius: 10px 0 0 10px;
   padding: 10px;
   font-weight: 900; 
+  display: flex;
+  position: relative;
+}
+.project-count {
+  background: rgb(250, 246, 246);
+  padding: 5px 12px;
+  border-radius: 50%;
+  position: absolute;
+  right: 15px;
+  top: 6px;
+}
+.projects .project-item {
+  padding: 0;
+  margin: 15px 20px;
+  font-weight: 700;
 }
 
 
@@ -181,8 +196,11 @@ table.status thead {
   border-radius: 5px;
   padding: 15px 20px;
   position: absolute;
-  right: 15px;
-  top: 5px;
+  right: 25px;
+  top: 10px;
+  outline: none !important;
+  cursor: pointer;
+  font-weight: 700;
 }
 
 /*Dashboard*/
@@ -232,15 +250,22 @@ table.status thead {
 /*Search*/
 .search {
   border:1px solid #eee;
-  padding: 5px 15px;
+  padding: 15px;
   margin-top: 15px;
+  border-radius: 10px;
+  background: #E0D5E2;
+  font-weight: 700;
+  color: #777;
+  font-size: 14px;
+  width: 300px;
+  outline: none;
 }
 
 /*col-left*/
 .col-left {
   background-color: var(--dark-purple);
   color: #916095;
-  padding: 15px 30px;
+  padding: 15px 0 15px 30px;
 }
 .col-left hr{
   background: #56305A;
@@ -266,6 +291,15 @@ table.status thead {
   list-style: none;
   padding: 0;
 }
+.screen-options .selected {
+  background: var(--pink);
+  color:#fff;
+  padding: 10px;
+  border-radius: 10px 0 0 10px;
+}
+.screen-options .fa-bug {
+  margin-right: 5px;
+}
 
 /*Settings*/
 .settings {
@@ -282,4 +316,19 @@ table.status thead {
   position: absolute;
   font-family: 'FontAwesome';
   left: -12px;
+}
+
+/*Popup*/
+.popup {
+  background:#fff;
+  position: absolute;
+  border-radius: 5px;
+  border: 1px solid #000;
+  top: 10%;
+  width: 100%;
+  height: 300px;
+  padding: 15px;
+  max-width: 700px;
+  right: 50% - 350px;
+  margin-left: -250px;
 }

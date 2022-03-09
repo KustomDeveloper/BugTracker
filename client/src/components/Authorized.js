@@ -1,5 +1,6 @@
 import React from 'react';
 import Logo from './Logo';
+import AddBug from './AddBug';
 
 const Authorized = () => {
   return(
@@ -10,7 +11,7 @@ const Authorized = () => {
         <hr />
 
         <ul className="screen-options">
-          <li>Bugs</li>
+          <li className="selected"><i className="fa fa-bug" aria-hidden="true"></i> Bugs</li>
         </ul>
 
         <button className="settings">Settings</button>
@@ -21,13 +22,18 @@ const Authorized = () => {
         <hr/>
         <h3>PROJECTS</h3>
         <ul className="projects">
-          <li class="selected">My Projects</li>
+          <li className="selected project-head">My Projects<span className="project-count">3</span></li>
+          <li className="project-item">Clinton Project</li>
+          <li className="project-item">Dr. Malone</li>
+          <li className="project-item">Joe Rogan Podcast</li>
         </ul>
+
+
       </div>
 
       <div className="col col-md-6 col-right">
       <h1>My Bugs</h1>
-        <button className="submit-bug">Submit Bug</button>
+        <AddBug/>
         <hr />
         <div className="overview">
           <div className="grid-item open-bugs"><span className="count">36</span>Open Bugs</div>
