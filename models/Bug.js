@@ -20,7 +20,11 @@ const BugSchema = new mongoose.Schema({
     status: {
         type: String,
         required: true
-    }
+    },
+    project_name: {
+        type: String,
+        required: true
+    },
 });
   
 const Bug = mongoose.model('Bug', BugSchema);

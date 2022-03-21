@@ -8,7 +8,11 @@ const ProjectSchema = new mongoose.Schema({
     project_owner: {
         type: String,
         required: true
-    }
+    },
+    created_date: {
+        type: String,
+        required: true
+    },
 });
   
 const Project = mongoose.model('Project', ProjectSchema);

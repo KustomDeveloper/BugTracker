@@ -5,6 +5,7 @@ import AddBug from './AddBug';
 const Authorized = () => {
   return(
     <div className="dashboard row h-100">
+      <AddBug/>
       <div className="col col-md-3 col-left">
         <Logo />
         <h2>My Space</h2>
@@ -33,7 +34,6 @@ const Authorized = () => {
 
       <div className="col col-md-6 col-right">
       <h1>My Bugs</h1>
-        <AddBug/>
         <hr />
         <div className="overview">
           <div className="grid-item open-bugs"><span className="count">36</span>Open Bugs</div>

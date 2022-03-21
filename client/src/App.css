@@ -87,7 +87,7 @@ body {
   transition: background-color 0.2s;
 }
 .login form input[type="submit"]:hover {
-background-color: #2868c7;
+  background-color: #2868c7;
   transition: background-color 0.2s;
 }
 
@@ -102,7 +102,16 @@ background-color: #2868c7;
 .alert {
   color: red;
   font-size: 13px;
+  position: relative;
+  padding: 0;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  display: block;
+  width: 100%;
+  text-align: center;
 }
+
 .success {
   color: green;
 }
@@ -201,6 +210,14 @@ table.status thead {
   outline: none !important;
   cursor: pointer;
   font-weight: 700;
+  z-index: 999;
+  max-width: 200px !important;
+}
+.closeButton {
+  position: absolute;
+  right: 25px;
+  top: 15px;
+  cursor: pointer;
 }
 
 /*Dashboard*/
@@ -326,9 +343,33 @@ table.status thead {
   border: 1px solid #000;
   top: 10%;
   width: 100%;
-  height: 300px;
-  padding: 15px;
+  padding: 35px;
   max-width: 700px;
   right: 50% - 350px;
+  left:50%;
   margin-left: -250px;
+}
+.popup h3 {
+  font-size:20px;
+  font-weight: 700;
+}
+.full-width {
+  display: block;
+  width: 100%;
+  margin-top: 15px;
+}
+
+.backdrop {
+  position: fixed;
+  top:0;
+  left:0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  z-index: 1;
+}
+
+.project-form, .bug-form {
+  max-width: 300px;
+  margin: 20px 0;
 }

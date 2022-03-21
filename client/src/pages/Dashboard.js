@@ -12,14 +12,9 @@ const Dashboard = () => {
     const dispatch = useDispatch(); 
 
     useEffect(() => {
-        const data = {
-            token: token
-        }
         const requestOptions = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-           
-            body: JSON.stringify(data)
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json', "Authorization" : `Bearer ${token}` },
         };
 
         fetch('/dashboard', requestOptions)
@@ -29,7 +24,6 @@ const Dashboard = () => {
                 if(data.authenticated === true) {
                     dispatch(logInUser());
                 }
-
             });
 
     }, [])

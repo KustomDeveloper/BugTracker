@@ -12,6 +12,7 @@ const LoginForm = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [errors, setErrors] = useState([]);
+
     useEffect(() => {
         if(isLoggedIn === true) {
             navigate('/dashboard')
@@ -69,7 +70,7 @@ const LoginForm = () => {
                             onChange={e => setPassword(e.target.value)}
                             placeholder="Password" id="password" required />
 
-                        <p className="alert">{errors}</p>
+                        <div className="alert">{errors}</div>
 
                         <input type="submit" value="Login" />
                     </form>
