@@ -1,13 +1,19 @@
 import React, {useEffect, useState} from "react";
-import { motion, AnimatePresence } from 'framer-motion'
+import {motion, AnimatePresence} from 'framer-motion'
 import DatePicker from 'react-datepicker';
+import {Link, useNavigate} from "react-router-dom";
+import {useSelector, useDispatch} from 'react-redux';
+import {logInUser} from '../actions';
+
 
 const PopUpForm = ({ showModal, updateShowModal }) => {
+    const isLoggedIn = useSelector(state => state.auth);
+    const navigate = useNavigate();
     const token = localStorage.getItem('token');
 
     const [allProjects, updateAllProjects] = useState("");
 
-    const [projectName, setProjectName] = useState("");
+    // const [projectName, setProjectName] = useState("");
     const [bug, setBug] = useState("");
     const [project, setProject] = useState("");
     const [dueDate, setDueDate] = useState(new Date());
@@ -45,6 +51,7 @@ const PopUpForm = ({ showModal, updateShowModal }) => {
             .then(response => response.json())
             .then(data => { 
                 if(data.authenticated === false) return
+
                 if(data.authenticated === true) {
                     console.log('data sent and authenticated')
                 }
@@ -70,7 +77,7 @@ const PopUpForm = ({ showModal, updateShowModal }) => {
         fetch('/add-bug', requestOptions)
             .then(response => response.json())
             .then(data => { 
-                if(data.authenticated === false) return
+                if(data.authenticated === false) navigate('/')
                 if(data.authenticated === true) {
                     console.log('data sent and authenticated')
                 }
@@ -84,15 +91,19 @@ const PopUpForm = ({ showModal, updateShowModal }) => {
             method: 'GET',
             headers: { 'Content-Type': 'application/json',  "Authorization" : `Bearer ${token}` }
         };
+        console.log('ran')
 
-        fetch('/show-projects', requestOptions)
+        fetch('/projects', requestOptions)
         .then(response => response.json())
         .then(data => { 
-            if(data.authenticated === false) return
+            if(data.authenticated === false) return // Redirect user if not logged in -> use state -> isLoggedIn?
 
 
             if(data.authenticated === true) {
-                console.log('data sent and authenticated')
+                // console.log('data sent and authenticated')
+                // console.log(data.projects)
+                // console.log(data.id)
+                updateAllProjects(data.projects);
             }
 
     });
@@ -120,11 +131,13 @@ const PopUpForm = ({ showModal, updateShowModal }) => {
                             </select>
                         </form>
 
+                       {console.log(allProjects)}
+
                         <form className="project-form" onSubmit={createProject}>
                             <h3>Create a Project</h3>
-                            <div class="form-group">
+                            <div className="form-group">
                                 <label className="full-width">Project Name</label>
-                                <input className="form-control" type="text" name="project_name" onChange={e => setProjectName(e.target.value)} value={projectName} />
+                                <input className="form-control" type="text" name="project_name" onChange={e => setProject(e.target.value)} value={project} />
                             </div>
 
                             <input type="submit" name="project_submit" value="Create Project" /> 
@@ -132,7 +145,7 @@ const PopUpForm = ({ showModal, updateShowModal }) => {
 
                         <form className="bug-form" onSubmit={createBug}>
                             <h3>Add Bug</h3>
-                            <div class="form-group">
+                            <div className="form-group">
                                 <label className="full-width">Bug Name</label>
                                 <input className="form-control" type="text" name="bug_name" onChange={e => setBug(e.target.value)} value={bug} />
                             </div>

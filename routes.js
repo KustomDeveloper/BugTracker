@@ -53,7 +53,7 @@ async (request, response) => {
             await user.save();
 
             // Set token with expiration of 1 hour
-            const accessToken = await jwt.sign({data: user.id, exp: Math.floor(Date.now() / 1000) + (60 * 60)}, token_secret);
+            const accessToken = await jwt.sign({data: user.name, exp: Math.floor(Date.now() / 1000) + (60 * 60)}, token_secret);
 
             response.status(200).json({
                 success: true,
@@ -85,7 +85,7 @@ app.post("/login_user", async (request, response) => {
             if(pw === password) {
 
                 // Set token with expiration of 1 hour
-                const accessToken = await jwt.sign({data: user.id, exp: Math.floor(Date.now() / 1000) + (60 * 60)}, token_secret);
+                const accessToken = await jwt.sign({data: user.name, exp: Math.floor(Date.now() / 1000) + (60 * 60)}, token_secret);
 
                 response.status(200).json({
                     success: true,
@@ -127,6 +127,29 @@ app.get('/dashboard', authenticateToken, (req, res) => {
     });
 })
 
+//  @desc   Show Projects
+//  @route  get /projects
+//  @access Private
+app.get("/projects", authenticateToken, async (req, res) => {
+
+    try {
+        token = req.headers.authorization.split(' ')[1];
+
+        const userData = jwt.decode(token);
+        const username = userData.data;  
+
+        const projects = await Project.find({ project_owner: username });
+        
+        res.status(200).json({
+            authenticated: true,
+            projects,
+            username
+        });
+      
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
 
 //  @desc   Create Project
 //  @route  POST /create-project
@@ -138,14 +161,16 @@ app.post('/create-project', authenticateToken, async (req, res) => {
     // created_date
 
     try {
+        const projectName = req.body.project;
+        console.log('body: ', req.body)
         token = req.headers.authorization.split(' ')[1];
 
         const userData = jwt.decode(token);
-        const userId = userData.data;
+        const username = userData.data;
 
         const project = new Project({ 
-            project_name: "My Project", 
-            project_owner: userId,
+            project_name: projectName, 
+            project_owner: username,
             created_date: Date.now(), 
         });
 
@@ -183,10 +208,10 @@ app.post('/add-bug', authenticateToken, async (req, res) => {
         token = req.headers.authorization.split(' ')[1];
 
         const userData = jwt.decode(token);
-        const userId = userData.data;
+        const username = userData.data;
 
         const bug = new Bug({   bug_name: bugName, 
-                                assigned_to: userId, 
+                                assigned_to: username, 
                                 created_date: Date.now(), 
                                 due_date: dueDate, 
                                 status: 'open', 

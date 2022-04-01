@@ -19,3 +19,11 @@ test.on("error", console.error.bind(console, "connection error: "));
 test.once("open", function () {
   console.log("Connected successfully");
 });
+
+// Mongo Shell
+// db.getCollectionNames()
+// bugs projects users
+// db.bugs.find()
+// db.projects.find()
+// db.bugs.find().pretty()
+// db.projects.find().pretty()
