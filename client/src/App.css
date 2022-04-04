@@ -157,11 +157,23 @@ table.status thead {
   list-style: none;
   padding: 0;
 }
+.projects ul {
+  padding: 0;
+}
+.project-form, .bug-form {
+  max-width: 300px;
+  margin: 20px 0;
+}
+.bug-form input[name="bug_submit"] {
+  background: #BC2551;
+  color:#fff;
+  font-weight: 700;
+}
 .projects li {
-  margin-top: 25px;
   color: #000;
   font-weight: 500;
   font-size: 15px;
+  list-style: none;
 }
 .projects .selected {
   background: #fff;
@@ -181,7 +193,7 @@ table.status thead {
 }
 .projects .project-item {
   padding: 0;
-  margin: 15px 20px;
+  margin: 10px 15px;
   font-weight: 700;
 }
 
@@ -221,6 +233,9 @@ table.status thead {
 }
 
 /*Dashboard*/
+tr {
+  border-bottom: 1px solid #eee;
+}
 .dashboard h1 {
   font-size: 24px;
   font-weight: 900;
@@ -367,9 +382,4 @@ table.status thead {
   height: 100%;
   background: rgba(0,0,0,0.5);
   z-index: 1;
-}
-
-.project-form, .bug-form {
-  max-width: 300px;
-  margin: 20px 0;
 }

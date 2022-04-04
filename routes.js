@@ -190,6 +190,36 @@ app.post('/create-project', authenticateToken, async (req, res) => {
 
 })
 
+//  @desc   Show Bugs
+//  @route  get /bugs
+//  @access Private
+app.get("/bugs", authenticateToken, async (req, res) => {
+
+    try {
+        token = req.headers.authorization.split(' ')[1];
+
+        const userData = jwt.decode(token);
+        const username = userData.data;  
+
+        
+        //assigned_to
+        //project_name
+
+        // const bugs = await Bug.find({ assigned_to: username });
+        const bugs = await Bug.find({});
+
+        
+        res.status(200).json({
+            authenticated: true,
+            bugs,
+            username
+        });
+      
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
+
 //  @desc   Add Bug
 //  @route  POST /add-bug
 //  @access Private

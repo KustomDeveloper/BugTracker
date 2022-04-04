@@ -1,11 +1,55 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Logo from './Logo';
 import AddBug from './AddBug';
 
 const Authorized = () => {
+  const token = localStorage.getItem('token');
+  const [allProjects, updateAllProjects] = useState("");
+  const [allBugs, updateAllBugs] = useState("");
+  let bugsKey = 0;
+
+  useEffect(() => {
+    //GET PROJECTS
+    const projectOptions = {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json',  "Authorization" : `Bearer ${token}` }
+    };
+
+    fetch('/projects', projectOptions)
+    .then(response => response.json())
+    .then(data => { 
+        if(data.authenticated === false) return // Redirect user if not logged in -> use state -> isLoggedIn?
+
+
+        if(data.authenticated === true) {
+            updateAllProjects(data.projects);
+        }
+
+    });
+  }, [])
+
+  useEffect(() => {
+    //GET BUGS
+    const bugOptions = {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json',  "Authorization" : `Bearer ${token}` }
+    };
+
+    fetch('/bugs', bugOptions)
+    .then(response => response.json())
+    .then(data => { 
+        if(data.authenticated === false) return // Redirect user if not logged in -> use state -> isLoggedIn?
+
+        if(data.authenticated === true) {
+            updateAllBugs(data.bugs);
+        }
+
+    });
+  }, [])
+
   return(
     <div className="dashboard row h-100">
-      <AddBug/>
+      <AddBug allProjects={allProjects} updateAllProjects={updateAllProjects}/>
       <div className="col col-md-3 col-left">
         <Logo />
         <h2>My Space</h2>
@@ -23,10 +67,12 @@ const Authorized = () => {
         <hr/>
         <h3>PROJECTS</h3>
         <ul className="projects">
-          <li className="selected project-head">My Projects<span className="project-count">3</span></li>
-          <li className="project-item">Clinton Project</li>
-          <li className="project-item">Dr. Malone</li>
-          <li className="project-item">Joe Rogan Podcast</li>
+          <li className="selected project-head">My Projects<span className="project-count">{allProjects.length}</span></li>
+            <ul>
+            { allProjects ? allProjects.map((item, key) => 
+            <li className="project-item" key={key}>{item.project_name}</li>) 
+            : null }
+            </ul>
         </ul>
 
 
@@ -55,13 +101,15 @@ const Authorized = () => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>bug stuff</td>
-              <td>status stuff</td>
-              <td>created stuff</td>
-              <td>due stuff</td>
-              <td>assigned stuff</td>
-            </tr>
+              { allBugs ? allBugs.map((item) => 
+              <tr>
+                <td key={bugsKey++}>{item.bug_name}</td>
+                <td key={bugsKey++}>{item.status}</td>
+                <td key={bugsKey++}>{item.created_date}</td>
+                <td key={bugsKey++}>{item.due_date}</td>
+                <td key={bugsKey++}>{item.project_name}</td>
+              </tr>
+              ) : null }
           </tbody>
         </table>
       </div>

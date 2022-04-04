@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import PopUpForm from "./PopUpForm";
 
-const AddBug = () => {
+const AddBug = ({allProjects, updateAllProjects}) => {
     const [showModal, updateShowModal] = useState(false);
 
     const handleClick = () => {
@@ -11,7 +11,7 @@ const AddBug = () => {
     return(
         <>
         <button onClick={e => handleClick(e)} className="submit-bug">Submit Bug</button>
-        {showModal ? <PopUpForm showModal={showModal} updateShowModal={updateShowModal}  /> : null}
+        {showModal ? <PopUpForm allProjects={allProjects} updateAllProjects={updateAllProjects} showModal={showModal} updateShowModal={updateShowModal}  /> : null}
         </>
     )
 }
