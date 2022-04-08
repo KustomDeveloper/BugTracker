@@ -7,17 +7,12 @@ import {useSelector, useDispatch} from 'react-redux';
 import {logInUser} from '../actions';
 
 
-const PopUpForm = ({ showModal, updateShowModal, allProjects, updateAllProjects }) => {
+const PopUpForm = ({ allUsers, updateAllUsers, showModal, updateShowModal, allProjects, updateAllProjects }) => {
     const isLoggedIn = useSelector(state => state.auth);
-
 
     const backdrop = {
         visible: { opacity: 1},
         hidden: { opacity: 0 }
-    }
-
-    const handleChange = (e) => {
-      console.log(e)
     }
 
     const ClosePopup = (e) => {
@@ -36,7 +31,7 @@ const PopUpForm = ({ showModal, updateShowModal, allProjects, updateAllProjects 
                     <div className="popup">
                         <div onClick={e => ClosePopup(e)} className="closeButton">X</div>
 
-                        {allProjects ? <CreateBug allProjects={allProjects} updateAllProjects={updateAllProjects}/> : <CreateProject />}
+                        {allProjects.length >= 1 ? <CreateBug allUsers={allUsers} updateAllUsers={updateAllUsers} updateShowModal={updateShowModal} allProjects={allProjects} updateAllProjects={updateAllProjects}/> : <CreateProject />}
 
                       
                     </div>

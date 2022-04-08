@@ -4,9 +4,10 @@ import AddBug from './AddBug';
 
 const Authorized = () => {
   const token = localStorage.getItem('token');
+  const [selectedProject, updateSelectedProject] = useState("");
   const [allProjects, updateAllProjects] = useState("");
+  const [allUsers, updateAllUsers] = useState("");
   const [allBugs, updateAllBugs] = useState("");
-  let bugsKey = 0;
 
   useEffect(() => {
     //GET PROJECTS
@@ -47,9 +48,28 @@ const Authorized = () => {
     });
   }, [])
 
+  useEffect(() => {
+    //GET USERS
+    const userOptions = {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json',  "Authorization" : `Bearer ${token}` }
+    };
+
+    fetch('/users', userOptions)
+    .then(response => response.json())
+    .then(data => { 
+        if(data.authenticated === false) return // Redirect user if not logged in -> use state -> isLoggedIn?
+
+        if(data.authenticated === true) {
+            updateAllUsers(data.users);
+        }
+
+    });
+  }, [])
+
   return(
     <div className="dashboard row h-100">
-      <AddBug allProjects={allProjects} updateAllProjects={updateAllProjects}/>
+      <AddBug allUsers={allUsers} updateAllUsers={updateAllUsers} allProjects={allProjects} updateAllProjects={updateAllProjects}/>
       <div className="col col-md-3 col-left">
         <Logo />
         <h2>My Space</h2>
@@ -74,7 +94,6 @@ const Authorized = () => {
             : null }
             </ul>
         </ul>
-
 
       </div>
 
@@ -101,13 +120,14 @@ const Authorized = () => {
             </tr>
           </thead>
           <tbody>
-              { allBugs ? allBugs.map((item) => 
-              <tr>
-                <td key={bugsKey++}>{item.bug_name}</td>
-                <td key={bugsKey++}>{item.status}</td>
-                <td key={bugsKey++}>{item.created_date}</td>
-                <td key={bugsKey++}>{item.due_date}</td>
-                <td key={bugsKey++}>{item.project_name}</td>
+
+              { allBugs.length >= 1 ? allBugs.filter((bug) => bug.assigned_to === "12345").map((item, key) => 
+              <tr key={key}>
+                <td>{item.bug_name}</td>
+                <td>{item.status}</td>
+                <td>{item.created_date}</td>
+                <td>{item.due_date}</td>
+                <td>{item.assigned_to}</td>
               </tr>
               ) : null }
           </tbody>

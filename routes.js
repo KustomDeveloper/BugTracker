@@ -112,7 +112,10 @@ app.get("/users", authenticateToken, async (req, res) => {
     const users = await User.find({});
   
     try {
-      res.send(users);
+        res.status(200).json({
+            authenticated: true,
+            users: users
+        });
     } catch (error) {
       res.status(500).send(error);
     }
@@ -136,7 +139,7 @@ app.get("/projects", authenticateToken, async (req, res) => {
         token = req.headers.authorization.split(' ')[1];
 
         const userData = jwt.decode(token);
-        const username = userData.data;  
+        const username = userData.data;
 
         const projects = await Project.find({ project_owner: username });
         
@@ -235,17 +238,21 @@ app.post('/add-bug', authenticateToken, async (req, res) => {
     try {
         const bugName = req.body.bug;
         const dueDate = req.body.dueDate;
+        const selectedProject = req.body.selectedProject;
+        const projectStatus = req.body.projectStatus;
+        const assignTo = req.body.assignTo;
+
         token = req.headers.authorization.split(' ')[1];
 
         const userData = jwt.decode(token);
         const username = userData.data;
 
         const bug = new Bug({   bug_name: bugName, 
-                                assigned_to: username, 
+                                assigned_to: assignTo, 
                                 created_date: Date.now(), 
                                 due_date: dueDate, 
-                                status: 'open', 
-                                project_name: 'First Project' 
+                                status: projectStatus, 
+                                project_name: selectedProject 
                             });
     
         await bug.save();

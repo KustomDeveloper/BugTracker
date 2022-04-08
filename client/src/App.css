@@ -359,10 +359,10 @@ tr {
   top: 10%;
   width: 100%;
   padding: 35px;
-  max-width: 700px;
-  right: 50% - 350px;
+  max-width: 400px;
+  right: 50% - 200px;
   left:50%;
-  margin-left: -250px;
+  margin-left: -200px;
 }
 .popup h3 {
   font-size:20px;
@@ -373,7 +373,13 @@ tr {
   width: 100%;
   margin-top: 15px;
 }
-
+.add-bug-errors {
+  color: red;
+  font-size: 15px;
+  margin: 10px 0;
+  display: block;
+  text-align: center;
+}
 .backdrop {
   position: fixed;
   top:0;

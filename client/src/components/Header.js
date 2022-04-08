@@ -10,7 +10,7 @@ const Header = () => {
   return(
       <div className="header">
         <div className="logo"><img src={logo} /></div>
-        {isLoggedIn ? <LogOut/> : <LogIn/> }
+        {/* {isLoggedIn ? <LogOut/> : <LogIn/> } */}
       </div>
   )
 }
