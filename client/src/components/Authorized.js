@@ -1,10 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import Logo from './Logo';
 import AddBug from './AddBug';
+import { useSelector, useDispatch } from 'react-redux';
+import { logOutUser } from '../actions';
 
 const Authorized = () => {
   const token = localStorage.getItem('token');
-  const [selectedProject, updateSelectedProject] = useState("");
+  const isLoggedIn = useSelector(state => state.auth);
+  const username = useSelector(state => state.user);
+  const dispatch = useDispatch(); 
+  const [tabSelected, updateTabSelected] = useState("");
   const [allProjects, updateAllProjects] = useState("");
   const [allUsers, updateAllUsers] = useState("");
   const [allBugs, updateAllBugs] = useState("");
@@ -19,8 +24,7 @@ const Authorized = () => {
     fetch('/projects', projectOptions)
     .then(response => response.json())
     .then(data => { 
-        if(data.authenticated === false) return // Redirect user if not logged in -> use state -> isLoggedIn?
-
+        if(data.authenticated === false) dispatch(logOutUser());
 
         if(data.authenticated === true) {
             updateAllProjects(data.projects);
@@ -39,14 +43,14 @@ const Authorized = () => {
     fetch('/bugs', bugOptions)
     .then(response => response.json())
     .then(data => { 
-        if(data.authenticated === false) return // Redirect user if not logged in -> use state -> isLoggedIn?
+        if(data.authenticated === false) dispatch(logOutUser());
 
         if(data.authenticated === true) {
             updateAllBugs(data.bugs);
         }
 
     });
-  }, [])
+  }, [allBugs])
 
   useEffect(() => {
     //GET USERS
@@ -121,7 +125,7 @@ const Authorized = () => {
           </thead>
           <tbody>
 
-              { allBugs.length >= 1 ? allBugs.filter((bug) => bug.assigned_to === "12345").map((item, key) => 
+              { allBugs.length >= 1 ? allBugs.filter((bug) => bug.assigned_to === username.value && bug.project_name === "First Project").map((item, key) => 
               <tr key={key}>
                 <td>{item.bug_name}</td>
                 <td>{item.status}</td>

@@ -389,3 +389,7 @@ tr {
   background: rgba(0,0,0,0.5);
   z-index: 1;
 }
+a.cp-link {
+  color: #BC2551 !important;
+  text-decoration: underline !important;
+}

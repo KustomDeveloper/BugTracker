@@ -125,8 +125,13 @@ app.get("/users", authenticateToken, async (req, res) => {
 //  @route  get /dashboard
 //  @access Private
 app.get('/dashboard', authenticateToken, (req, res) => {
+    token = req.headers.authorization.split(' ')[1];
+    const userData = jwt.decode(token);
+    const username = userData.data;
+
     res.status(200).json({
-        authenticated: true
+        authenticated: true,
+        username: username
     });
 })
 

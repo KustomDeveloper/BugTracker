@@ -14,6 +14,9 @@ const CreateBug = ({allUsers, updateAllUsers, allProjects, updateAllProjects, up
     const token = localStorage.getItem('token');
     const navigate = useNavigate();
 
+    const showProjectForm = () => {
+
+    }
 
     const createNewBug = (e) => {
         e.preventDefault();
@@ -49,14 +52,14 @@ const CreateBug = ({allUsers, updateAllUsers, allProjects, updateAllProjects, up
     return(
         
         <form className="bug-form" onSubmit={createNewBug}>
-            {console.log(allProjects)}
             <h3>Add Bug</h3>
             <div className="form-group">
                 <label className="full-width">Select a project</label>
                 <select className="form-control" value={selectedProject} onChange={e => setSelectedProject(e.target.value)} required>
-                    <option id='option-empty' value="">Choose a project</option>
-                    {allProjects.map((item, key) => <option id={key} value={item.project_name}>{item.project_name}</option>)}
+                    <option id='option-empty-one' value="">Choose a project</option>
+                    {allProjects.map((item, key) => <option key={key} value={item.project_name}>{item.project_name}</option>)}
                 </select>
+                <small>Want to <a className="cp-link" onClick={showProjectForm}>Create a Project</a> instead?</small>
             </div>
             <div className="form-group">
                 <label className="full-width">Project status</label>
@@ -75,9 +78,9 @@ const CreateBug = ({allUsers, updateAllUsers, allProjects, updateAllProjects, up
             <div className="form-group">
                 <label className="full-width">Assign to</label>
                 <select className="form-control" value={assignTo} onChange={e => setAssignTo(e.target.value)} required>
-                   <option id="option-empty" value="">Select person</option>
+                   <option id="option-empty-two" value="">Select person</option>
                    {allUsers.map((item, key) => (
-                    <option id={key} value={item.name}>{item.name}</option>
+                    <option key={key} value={item.name}>{item.name}</option>
                    ))}
                 </select>
             </div>

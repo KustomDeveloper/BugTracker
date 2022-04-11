@@ -3,7 +3,7 @@ import Authorized from '../components/Authorized';
 import Unauthorized from '../components/Unauthorized';
 import Header from '../components/Header';
 import { useSelector, useDispatch } from 'react-redux';
-import {logInUser} from '../actions';
+import {logInUser, setUsername} from '../actions';
 
 
 const Dashboard = () => {
@@ -23,6 +23,7 @@ const Dashboard = () => {
                 if(data.authenticated === false) return
                 if(data.authenticated === true) {
                     dispatch(logInUser());
+                    dispatch({type: "ADDUSERNAME", payload: data.username});
                 }
             });
 
