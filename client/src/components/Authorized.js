@@ -14,6 +14,7 @@ const Authorized = () => {
   const [allUsers, updateAllUsers] = useState("");
   const [allBugs, updateAllBugs] = useState("");
 
+
   useEffect(() => {
     //GET PROJECTS
     const projectOptions = {
@@ -62,7 +63,7 @@ const Authorized = () => {
     fetch('/users', userOptions)
     .then(response => response.json())
     .then(data => { 
-        if(data.authenticated === false) return // Redirect user if not logged in -> use state -> isLoggedIn?
+        if(data.authenticated === false) dispatch(logOutUser());
 
         if(data.authenticated === true) {
             updateAllUsers(data.users);
@@ -91,10 +92,10 @@ const Authorized = () => {
         <hr/>
         <h3>PROJECTS</h3>
         <ul className="projects">
-          <li className="selected project-head">My Projects<span className="project-count">{allProjects.length}</span></li>
+          <li className="selected project-head">All Projects<span className="project-count">{allProjects.length}</span></li>
             <ul>
             { allProjects ? allProjects.map((item, key) => 
-            <li className="project-item" key={key}>{item.project_name}</li>) 
+            <li onClick={e => updateTabSelected(e.target.innerHTML)} className={tabSelected === item.project_name ? "project-item selected" : "project-item"} key={key}>{item.project_name}</li>) 
             : null }
             </ul>
         </ul>
@@ -113,27 +114,37 @@ const Authorized = () => {
         </div>
         <hr />
 
+        {tabSelected}
+
         <table className="status">
           <thead>
             <tr>
               <th><h3>BUG</h3></th>
               <th><h3>STATUS</h3></th>
-              <th><h3>CREATED</h3></th>
               <th><h3>DUE</h3></th>
               <th><h3>ASSIGNED TO</h3></th>
             </tr>
           </thead>
           <tbody>
-
-              { allBugs.length >= 1 ? allBugs.filter((bug) => bug.assigned_to === username.value && bug.project_name === "First Project").map((item, key) => 
-              <tr key={key}>
+            {tabSelected != "" && allBugs.length >= 1 ? allBugs.filter((bug) => bug.assigned_to === username.value && tabSelected === tabSelected).map((item, key) => 
+              <tr className="selected-item" key={key}>
                 <td>{item.bug_name}</td>
                 <td>{item.status}</td>
-                <td>{item.created_date}</td>
                 <td>{item.due_date}</td>
                 <td>{item.assigned_to}</td>
               </tr>
               ) : null }
+
+             {tabSelected === "" && allBugs.length >= 1 ? allBugs.filter((bug) => bug.assigned_to === username.value).map((item, key) => 
+              <tr key={key}>
+                <td>{item.bug_name}</td>
+                <td>{item.status}</td>
+                <td>{item.due_date}</td>
+                <td>{item.assigned_to}</td>
+              </tr>
+              ) : null }
+
+  
           </tbody>
         </table>
       </div>

@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {Link, useNavigate} from "react-router-dom";
 import DatePicker from 'react-datepicker';
 
+
 const CreateBug = ({allUsers, updateAllUsers, allProjects, updateAllProjects, updateShowModal}) => {
 
     const [bug, setBug] = useState("");
