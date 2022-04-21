@@ -3,7 +3,7 @@ import {Link, useNavigate} from "react-router-dom";
 import DatePicker from 'react-datepicker';
 
 
-const CreateBug = ({allUsers, updateAllUsers, allProjects, updateAllProjects, updateShowModal}) => {
+const CreateBug = ({showProjectForm, updateShowProjectForm, allUsers, updateAllUsers, allProjects, updateAllProjects, updateShowModal}) => {
 
     const [bug, setBug] = useState("");
     const [selectedProject, setSelectedProject] = useState("");
@@ -15,8 +15,8 @@ const CreateBug = ({allUsers, updateAllUsers, allProjects, updateAllProjects, up
     const token = localStorage.getItem('token');
     const navigate = useNavigate();
 
-    const showProjectForm = () => {
-
+    const getProjectForm = () => {
+        updateShowProjectForm(true);
     }
 
     const createNewBug = (e) => {
@@ -60,7 +60,7 @@ const CreateBug = ({allUsers, updateAllUsers, allProjects, updateAllProjects, up
                     <option id='option-empty-one' value="">Choose a project</option>
                     {allProjects.map((item, key) => <option key={key} value={item.project_name}>{item.project_name}</option>)}
                 </select>
-                <small>Want to <a className="cp-link" onClick={showProjectForm}>Create a Project</a> instead?</small>
+                <small>Want to <a className="cp-link" onClick={getProjectForm}>Create a Project</a> instead?</small>
             </div>
             <div className="form-group">
                 <label className="full-width">Project status</label>

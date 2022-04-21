@@ -32,7 +32,7 @@ const Authorized = () => {
         }
 
     });
-  }, [])
+  }, [allProjects])
 
   useEffect(() => {
     //GET BUGS
@@ -70,7 +70,7 @@ const Authorized = () => {
         }
 
     });
-  }, [])
+  }, [allUsers])
 
   return(
     <div className="dashboard row h-100">

@@ -9,6 +9,7 @@ import {logInUser} from '../actions';
 
 const PopUpForm = ({ allUsers, updateAllUsers, showModal, updateShowModal, allProjects, updateAllProjects }) => {
     const isLoggedIn = useSelector(state => state.auth);
+    const [showProjectForm, updateShowProjectForm] = useState(false);
 
     const backdrop = {
         visible: { opacity: 1},
@@ -31,7 +32,7 @@ const PopUpForm = ({ allUsers, updateAllUsers, showModal, updateShowModal, allPr
                     <div className="popup">
                         <div onClick={e => ClosePopup(e)} className="closeButton">X</div>
 
-                        {allProjects.length >= 1 ? <CreateBug allUsers={allUsers} updateAllUsers={updateAllUsers} updateShowModal={updateShowModal} allProjects={allProjects} updateAllProjects={updateAllProjects}/> : <CreateProject />}
+                        {allProjects.length && showProjectForm === false >= 1 ? <CreateBug showProjectForm={showProjectForm} updateShowProjectForm={updateShowProjectForm} allUsers={allUsers} updateAllUsers={updateAllUsers} updateShowModal={updateShowModal} allProjects={allProjects} updateAllProjects={updateAllProjects}/> : <CreateProject showProjectForm={showProjectForm} updateShowProjectForm={updateShowProjectForm} showModal={showModal} updateShowModal={updateShowModal} />}
 
                       
                     </div>

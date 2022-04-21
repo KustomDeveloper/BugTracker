@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Link, useNavigate} from "react-router-dom";
 
-const CreateProject = () => {
+const CreateProject = ({showProjectForm, updateShowProjectForm, showModal, updateShowModal}) => {
     const token = localStorage.getItem('token');
     const navigate = useNavigate();
     const [project, setProject] = useState("");
@@ -24,7 +24,8 @@ const CreateProject = () => {
                 if(data.authenticated === false) return
 
                 if(data.authenticated === true) {
-                    console.log('data sent and authenticated')
+                    updateShowModal(false);
+                    updateShowProjectForm(false);
                 }
 
         });
