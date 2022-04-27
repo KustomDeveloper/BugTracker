@@ -3,13 +3,15 @@ import Logo from './Logo';
 import AddBug from './AddBug';
 import { useSelector, useDispatch } from 'react-redux';
 import { logOutUser } from '../actions';
+import AllProjects from './AllProjects';
+import SelectedProject from './SelectedProject';
 
 const Authorized = () => {
   const token = localStorage.getItem('token');
   const isLoggedIn = useSelector(state => state.auth);
   const username = useSelector(state => state.user);
   const dispatch = useDispatch(); 
-  const [tabSelected, updateTabSelected] = useState("");
+  const [tabSelected, updateTabSelected] = useState("allprojects");
   const [allProjects, updateAllProjects] = useState("");
   const [allUsers, updateAllUsers] = useState("");
   const [allBugs, updateAllBugs] = useState("");
@@ -51,6 +53,7 @@ const Authorized = () => {
         }
 
     });
+    
   }, [allBugs])
 
   useEffect(() => {
@@ -72,6 +75,7 @@ const Authorized = () => {
     });
   }, [allUsers])
 
+
   return(
     <div className="dashboard row h-100">
       <AddBug allUsers={allUsers} updateAllUsers={updateAllUsers} allProjects={allProjects} updateAllProjects={updateAllProjects}/>
@@ -92,7 +96,7 @@ const Authorized = () => {
         <hr/>
         <h3>PROJECTS</h3>
         <ul className="projects">
-          <li className="selected project-head">All Projects<span className="project-count">{allProjects.length}</span></li>
+          <li onClick={e => updateTabSelected('allprojects')} className="selected project-head">All Projects<span className="project-count">{allProjects.length}</span></li>
             <ul>
             { allProjects ? allProjects.map((item, key) => 
             <li onClick={e => updateTabSelected(e.target.innerHTML)} className={tabSelected === item.project_name ? "project-item selected" : "project-item"} key={key}>{item.project_name}</li>) 
@@ -114,8 +118,6 @@ const Authorized = () => {
         </div>
         <hr />
 
-        {tabSelected}
-
         <table className="status">
           <thead>
             <tr>
@@ -126,25 +128,11 @@ const Authorized = () => {
             </tr>
           </thead>
           <tbody>
-            {tabSelected != "" && allBugs.length >= 1 ? allBugs.filter((bug) => bug.assigned_to === username.value && tabSelected === tabSelected).map((item, key) => 
-              <tr className="selected-item" key={key}>
-                <td>{item.bug_name}</td>
-                <td>{item.status}</td>
-                <td>{item.due_date}</td>
-                <td>{item.assigned_to}</td>
-              </tr>
-              ) : null }
+           
+            {tabSelected === "allprojects" && allBugs.length >= 1 ? <AllProjects allBugs={allBugs} username={username} tabSelected={tabSelected} /> : null }
 
-             {tabSelected === "" && allBugs.length >= 1 ? allBugs.filter((bug) => bug.assigned_to === username.value).map((item, key) => 
-              <tr key={key}>
-                <td>{item.bug_name}</td>
-                <td>{item.status}</td>
-                <td>{item.due_date}</td>
-                <td>{item.assigned_to}</td>
-              </tr>
-              ) : null }
+            {tabSelected != "allprojects" && allBugs.length >= 1 ? <SelectedProject allBugs={allBugs} username={username} tabSelected={tabSelected} /> : null }
 
-  
           </tbody>
         </table>
       </div>
