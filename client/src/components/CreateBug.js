@@ -10,6 +10,7 @@ const CreateBug = ({showProjectForm, updateShowProjectForm, allUsers, updateAllU
     const [assignTo, setAssignTo] = useState("");
     const [projectStatus, setProjectStatus] = useState("");
     const [dueDate, setDueDate] = useState(new Date());
+    const [bugDescription, setBugDescription] = useState("");
     const [bugError, setBugError] = useState(""); 
 
     const token = localStorage.getItem('token');
@@ -26,7 +27,8 @@ const CreateBug = ({showProjectForm, updateShowProjectForm, allUsers, updateAllU
             dueDate,
             selectedProject,
             projectStatus,
-            assignTo
+            assignTo,
+            bugDescription
         }
 
         const requestOptions = {
@@ -95,6 +97,10 @@ const CreateBug = ({showProjectForm, updateShowProjectForm, allUsers, updateAllU
                     dateFormat="MM/dd/yyyy"
                     className="form-control"
                 />
+            </div>
+            <div className="form-group">
+                <label className="full-width">Description</label>
+                <textarea value={bugDescription} className="form-control" onChange={e => setBugDescription(e.target.value)} required />
             </div>
 
             <div className="add-bug-errors">{bugError ? bugError.message : null}</div>

@@ -13,7 +13,7 @@
 
 }
 body {
-  background-color: #435165;
+  background-color: #435165 !important;
   font-family: 'Lato', sans-serif;
   overflow-x: hidden;
 }
@@ -371,7 +371,7 @@ tr {
 .full-width {
   display: block;
   width: 100%;
-  margin-top: 15px;
+  margin-top: 5px;
 }
 .add-bug-errors {
   color: red;
@@ -392,4 +392,26 @@ tr {
 a.cp-link {
   color: #BC2551 !important;
   text-decoration: underline !important;
+}
+.form-group {
+  margin-bottom: 8px;
+}
+.bug-card {
+  background: #fff;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 30px;
+}
+.bug-card h1 {
+  font-size: 24px;
+}
+
+.form-control.bug-save {
+  background-color: rgb(33, 33, 132);
+  color:#fff;
+  width: 100%;
+  max-width: 100px;
+  padding: 2px 0;
+  font-size: 14px;
 }

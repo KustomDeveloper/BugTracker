@@ -9,6 +9,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Home from './pages/Home';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import Bug from './components/Bug';
 
 class App extends Component {
   render() {
@@ -18,6 +19,8 @@ class App extends Component {
             <Route path="/" element={<Home />} exact />
             <Route path="/register" element={<Register />} exact />
             <Route path="/dashboard" element={<Dashboard />} exact />
+            <Route path='/bug/:id' element={<Bug />} />
+        
         </Routes>
       </BrowserRouter>
     );

@@ -21,6 +21,8 @@ test.once("open", function () {
 });
 
 // Mongo Shell
+// mongo
+// use bugtracker
 // db.getCollectionNames()
 // bugs projects users
 // db.bugs.find()

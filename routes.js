@@ -228,6 +228,36 @@ app.get("/bugs", authenticateToken, async (req, res) => {
     }
 });
 
+
+//  @desc   Get Bug
+//  @route  get /bug/:id
+//  @access Private
+app.get("/bug/:id", authenticateToken, async (req, res) => {
+
+    const id = req.params.id;
+
+    try {
+        token = req.headers.authorization.split(' ')[1];
+
+        const userData = jwt.decode(token);
+        const username = userData.data;  
+
+
+        // const bugs = await Bug.find({ assigned_to: username });
+        const bug = await Bug.find({_id: id});
+
+        
+        res.status(200).json({
+            authenticated: true,
+            bug,
+            username
+        });
+      
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
+
 //  @desc   Add Bug
 //  @route  POST /add-bug
 //  @access Private
@@ -239,6 +269,7 @@ app.post('/add-bug', authenticateToken, async (req, res) => {
     // due_date
     // status
     // project_name
+    // bug_description
       
     try {
         const bugName = req.body.bug;
@@ -246,6 +277,7 @@ app.post('/add-bug', authenticateToken, async (req, res) => {
         const selectedProject = req.body.selectedProject;
         const projectStatus = req.body.projectStatus;
         const assignTo = req.body.assignTo;
+        const bugDescription = req.body.bugDescription
 
         token = req.headers.authorization.split(' ')[1];
 
@@ -257,7 +289,8 @@ app.post('/add-bug', authenticateToken, async (req, res) => {
                                 created_date: Date.now(), 
                                 due_date: dueDate, 
                                 status: projectStatus, 
-                                project_name: selectedProject 
+                                project_name: selectedProject,
+                                bug_description: bugDescription
                             });
     
         await bug.save();

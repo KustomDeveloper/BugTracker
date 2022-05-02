@@ -24,6 +24,10 @@ const BugSchema = new mongoose.Schema({
     project_name: {
         type: String,
         required: true
+    },
+    bug_description: {
+        type: String,
+        required: true
     }
 });
   

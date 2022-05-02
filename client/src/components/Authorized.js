@@ -34,6 +34,9 @@ const Authorized = () => {
         }
 
     });
+    // return () => {
+    //   cleanup
+    // }
   }, [allProjects])
 
   useEffect(() => {
@@ -53,6 +56,9 @@ const Authorized = () => {
         }
 
     });
+    // return () => {
+    //   cleanup
+    // }
     
   }, [allBugs])
 
@@ -73,6 +79,9 @@ const Authorized = () => {
         }
 
     });
+    // return () => {
+    //   cleanup
+    // }
   }, [allUsers])
 
 
@@ -131,7 +140,7 @@ const Authorized = () => {
            
             {tabSelected === "allprojects" && allBugs.length >= 1 ? <AllProjects allBugs={allBugs} username={username} tabSelected={tabSelected} /> : null }
 
-            {tabSelected != "allprojects" && allBugs.length >= 1 ? <SelectedProject allBugs={allBugs} username={username} tabSelected={tabSelected} /> : null }
+            {tabSelected === tabSelected && allBugs.length >= 1 ? <SelectedProject allBugs={allBugs} username={username} tabSelected={tabSelected}  /> : null }
 
           </tbody>
         </table>
