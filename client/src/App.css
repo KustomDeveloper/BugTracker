@@ -407,7 +407,11 @@ a.cp-link {
   font-size: 24px;
 }
 
-.form-control.bug-save {
+.form-group {
+  position: relative;
+}
+
+.form-control.bug-desc-save {
   background-color: rgb(33, 33, 132);
   color:#fff;
   width: 100%;
@@ -415,3 +419,29 @@ a.cp-link {
   padding: 2px 0;
   font-size: 14px;
 }
+.form-control.bug-title-save {
+  background-color: rgb(33, 33, 132);
+  color:#fff;
+  width: 100%;
+  max-width: 100px;
+  padding: 2px 0;
+  font-size: 14px;
+}
+
+.bug-desc-save {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.5s linear;
+}
+
+.bug-title-save {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.5s linear;
+}
+
+.show-btn {
+  visibility: visible;
+  opacity: 1;
+}
+
