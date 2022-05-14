@@ -445,3 +445,14 @@ a.cp-link {
   opacity: 1;
 }
 
+.bug-card .bug-delete, .bug-card .bug-delete:active, .bug-card .bug-delete:focus {
+  background: var(--pink);
+  color: #fff;
+  max-width: 100px;
+  margin-left: auto;
+}
+.bug-card .bug-delete:hover {
+  background: var(--light-pink);
+
+}
+

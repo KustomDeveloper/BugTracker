@@ -10,16 +10,28 @@ function authenticateToken(req, res, next) {
     try {
       token = req.headers.authorization.split(' ')[1]
       jwt.verify(token, token_secret, (err) => {
-        if (err) return res.sendStatus(403)
-
-        next()
+        if (err) {
+          // console.log(err)
+          return res.status(403).json({
+            authenticated: false,
+            message: "Error verifying token"
+          });
+        } else {
+          next();
+        }
       })
     } catch(err) {
-      console.log(err)
-      if (err) return res.sendStatus(403)
-
+      // console.log(err)
+      if (err) {
+        return res.status(403).json({
+          authenticated: false,
+          message: "Try/catch error"
+        });
+      } else {
         next()
       }
+    }
+      
   } else {
     res.status(401).json({
       authenticated: false

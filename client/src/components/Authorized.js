@@ -11,6 +11,7 @@ const Authorized = () => {
   const isLoggedIn = useSelector(state => state.auth);
   const username = useSelector(state => state.user);
   const dispatch = useDispatch(); 
+  
   const [tabSelected, updateTabSelected] = useState("allprojects");
   const [allProjects, updateAllProjects] = useState("");
   const [allUsers, updateAllUsers] = useState("");
@@ -34,9 +35,7 @@ const Authorized = () => {
         }
 
     });
-    // return () => {
-    //   cleanup
-    // }
+
   }, [allProjects])
 
   useEffect(() => {
@@ -56,9 +55,6 @@ const Authorized = () => {
         }
 
     });
-    // return () => {
-    //   cleanup
-    // }
     
   }, [allBugs])
 
@@ -79,9 +75,7 @@ const Authorized = () => {
         }
 
     });
-    // return () => {
-    //   cleanup
-    // }
+
   }, [allUsers])
 
 
@@ -137,6 +131,7 @@ const Authorized = () => {
             </tr>
           </thead>
           <tbody>
+
            
             {tabSelected === "allprojects" && allBugs.length >= 1 ? <AllProjects allBugs={allBugs} username={username} tabSelected={tabSelected} /> : null }
 

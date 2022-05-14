@@ -14,6 +14,17 @@ app.use(express.json());
 
 const { auth: { token_secret } } = config;
 
+//  @desc   Check login status
+//  @route  get /check-login-status
+//  @access Private
+app.get("/check-login-status", authenticateToken, async (req, res) => {
+
+    res.status(200).json({
+        authenticated: true
+    });
+
+});
+
 //  @desc   Register User
 //  @route  POST /add_user
 //  @access Public
@@ -105,8 +116,8 @@ app.post("/login_user", async (request, response) => {
     }
 });
 
-//  @desc   Login User
-//  @route  get /login_user
+//  @desc   Get Users
+//  @route  get /users
 //  @access Private
 app.get("/users", authenticateToken, async (req, res) => {
     const users = await User.find({});
@@ -209,14 +220,8 @@ app.get("/bugs", authenticateToken, async (req, res) => {
         const userData = jwt.decode(token);
         const username = userData.data;  
 
-        
-        //assigned_to
-        //project_name
-
-        // const bugs = await Bug.find({ assigned_to: username });
         const bugs = await Bug.find({});
 
-        
         res.status(200).json({
             authenticated: true,
             bugs,
@@ -233,7 +238,6 @@ app.get("/bugs", authenticateToken, async (req, res) => {
 //  @route  get /bug/:id
 //  @access Private
 app.get("/bug/:id", authenticateToken, async (req, res) => {
-
     const id = req.params.id;
 
     try {
@@ -242,11 +246,8 @@ app.get("/bug/:id", authenticateToken, async (req, res) => {
         const userData = jwt.decode(token);
         const username = userData.data;  
 
-
-        // const bugs = await Bug.find({ assigned_to: username });
         const bug = await Bug.find({_id: id});
 
-        
         res.status(200).json({
             authenticated: true,
             bug,
@@ -306,6 +307,68 @@ app.post('/add-bug', authenticateToken, async (req, res) => {
         });
     }
 })
+
+//  @desc   Update Bug Title
+//  @route  PUT /update-bug-title
+//  @access Private
+app.put('/update-bug-title/', authenticateToken, async (req, res) => {
+    const bugName = req.body.title;
+    const id = req.body.id;
+
+    try {
+        await Bug.updateOne({ _id: id }, { bug_name: bugName });
+
+        res.status(200).json({
+            authenticated: true,
+            message: "Title Updated."
+        });
+                
+    } catch(err) {
+        console.log(err);
+    }
+
+});
+
+//  @desc   Update Bug Description
+//  @route  PUT /update-bug-description
+//  @access Private
+app.put('/update-bug-description/', authenticateToken, async (req, res) => {
+    const id = req.body.id;
+    const bugDescription = req.body.description;
+
+    try {
+        await Bug.updateOne({ _id: id }, { bug_description: bugDescription });
+
+        res.status(200).json({
+            authenticated: true,
+            message: "Description Updated."
+        });
+                
+    } catch(err) {
+        console.log(err);
+    }
+
+});
+
+//  @desc   Delete Bug
+//  @route  DELETE /delete-bug
+//  @access Private
+app.delete('/delete-bug/', authenticateToken, async (req, res) => {
+    const id = req.body.id;
+
+    try {
+        await Bug.deleteOne({ _id: id });
+
+        res.status(200).json({
+            authenticated: true,
+            message: "Bug deleted."
+        });
+                
+    } catch(err) {
+        console.log(err);
+    }
+});
+
 
 
 
