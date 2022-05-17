@@ -24,7 +24,7 @@ const Bug = () => {
         fetch('/check-login-status', options)
         .then(response => response.json())
         .then(data => { 
-            console.log(data)
+            // console.log(data)
             if(data.authenticated === false) {
                 setLoginStatus(false);
                 dispatch(logOutUser());
@@ -58,8 +58,9 @@ const Bug = () => {
 
             </div>
 
-            <div className="col col-md-3 col-mid"> 
-            
+            <div className="col col-md-3 col-mid bug-single-mid"> 
+                <h2>Project</h2>
+
             </div>
 
             <div className="col col-md-6 col-right">

@@ -95,23 +95,27 @@ const BugForm = () => {
     const deleteBug = (e) => {
         e.preventDefault();
 
-        const options = {
-            method: 'Delete',
-            headers: { 'Content-Type': 'application/json',  "Authorization" : `Bearer ${token}` },
-            body: JSON.stringify({ id: id })
-        };
-    
-        fetch('/delete-bug/', options)
-        .then(response => response.json())
-        .then(data => { 
-            if(data.authenticated === false) {
-                dispatch(logOutUser());
-            }
-    
-            if(data.authenticated === true) {
-                navigate('/dashboard');
-            }
-        });
+        let isConfirmed = window.confirm("Are you sure you want to delete this Bug?");
+ 
+        if(isConfirmed === true) {
+            const options = {
+                method: 'Delete',
+                headers: { 'Content-Type': 'application/json',  "Authorization" : `Bearer ${token}` },
+                body: JSON.stringify({ id: id })
+            };
+        
+            fetch('/delete-bug/', options)
+            .then(response => response.json())
+            .then(data => { 
+                if(data.authenticated === false) {
+                    dispatch(logOutUser());
+                }
+        
+                if(data.authenticated === true) {
+                    navigate('/dashboard');
+                }
+            });
+        }
 
     }
 
@@ -128,19 +132,26 @@ const BugForm = () => {
 
 
     return(
-        <form>
-        <div className="form-group">
-          <input onFocus={showTitleBtn} ref={titleArea} className="form-control" value={bugTitle} onChange={e => updateBugTitle(e.target.value)}></input>
-          <button ref={headlineBtn} onClick={saveTitle} className="form-control bug-title-save">Save</button>
-        </div>
-          
-        <div className="form-group">
-          <textarea onFocus={showDescBtn} ref={descriptionArea} className="form-control" value={bugDescription} onChange={e => updateBugDescription(e.target.value)}></textarea>
-          <button ref={textAreaBtn} onClick={saveDescription} className="form-control bug-desc-save">Save</button>
-        </div>
+        <form className="bug-edit-form">
+            <div className="form-group">
+                <h3>Title</h3>
+                <input onFocus={showTitleBtn} ref={titleArea} className="form-control" value={bugTitle} onChange={e => updateBugTitle(e.target.value)}></input>
+                <button ref={headlineBtn} onClick={saveTitle} className="form-control bug-title-save">Save</button>
+            </div>
+            
+            <div className="form-group">
+                <h3>Due Date</h3>
+                
+            </div>
 
-        <button onClick={deleteBug} className="form-control bug-delete">Delete</button>
-      </form>
+            <div className="form-group">
+                <h3>Description</h3>
+                <textarea onFocus={showDescBtn} ref={descriptionArea} className="form-control" value={bugDescription} onChange={e => updateBugDescription(e.target.value)}></textarea>
+                <button ref={textAreaBtn} onClick={saveDescription} className="form-control bug-desc-save">Save</button>
+            </div>
+
+            <button onClick={deleteBug} className="form-control bug-delete">Delete</button>
+        </form>
     )
 }
 

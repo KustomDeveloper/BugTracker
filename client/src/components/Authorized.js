@@ -114,7 +114,6 @@ const Authorized = () => {
         <hr />
         <div className="overview">
           <div className="grid-item open-bugs"><span className="count">36</span>Open Bugs</div>
-          <div className="grid-item closed-bugs"><span className="count">09</span>Closed Bugs</div>
           <div className="grid-item overdue-bugs"><span className="count">12</span>Overdue</div>
           <div className="grid-item due-today"><span className="count">18</span>Due Today</div>
           <div className="grid-item due-in-a-week"><span className="count">08</span>Due in 7 Days</div>

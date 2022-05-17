@@ -147,9 +147,12 @@ table.status thead {
   color: #916095;
   padding-right: 0;
 }
+.col.col-md-3.col-mid {
+  padding-right: 0;
+}
 .col-mid h3 {
   font-size: 13px;
-  transform: Capitalize;
+  text-transform: Capitalize;
   font-weight: 900;
   letter-spacing: 0.5px;
 }
@@ -339,7 +342,8 @@ tr {
   color: #916095;
   border: none;
   position: absolute;
-  bottom: 15px;
+  bottom: 10px;
+  left: 35px;
   font-size: 16px;
   font-weight: 700;
 }
@@ -451,8 +455,28 @@ a.cp-link {
   max-width: 100px;
   margin-left: auto;
 }
+
 .bug-card .bug-delete:hover {
   background: var(--light-pink);
-
 }
 
+/*Fix padding issue*/
+.col.col-md-3.col-left {
+  padding: 0 0 0 20px;
+}
+.col-mid .projects ul {
+  padding-right: 0;
+}
+.col-mid .projects ul li {
+  padding: 5px;
+}
+
+/*Bug single styling*/
+.bug-single-mid h2 {
+  color: #000;
+}
+
+.bug-edit-form h3 {
+  color: rgb(173, 168, 168);
+  font-size: 13px;
+}
