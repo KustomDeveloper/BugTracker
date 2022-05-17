@@ -22,6 +22,7 @@ const BugForm = () => {
     const textAreaBtn = useRef();
     const headlineBtn = useRef();
 
+    //Get single bug
     useEffect(() => {
         const bugOptions = {
             method: 'GET',
