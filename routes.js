@@ -350,6 +350,30 @@ app.put('/update-bug-description/', authenticateToken, async (req, res) => {
 
 });
 
+//  @desc   Update Bug Date
+//  @route  PUT /update-bug-date
+//  @access Private
+app.put('/update-bug-date/', authenticateToken, async (req, res) => {
+    const id = req.body.id;
+    const dueDate = req.body.due_date;
+
+    console.log(id, dueDate)
+
+    try {
+        await Bug.updateOne({ _id: id }, { due_date: dueDate });
+
+        res.status(200).json({
+            authenticated: true,
+            message: "Date Updated."
+        });
+                
+    } catch(err) {
+        console.log(err);
+    }
+
+});
+
+
 //  @desc   Delete Bug
 //  @route  DELETE /delete-bug
 //  @access Private

@@ -21,6 +21,7 @@ const CreateBug = ({showProjectForm, updateShowProjectForm, allUsers, updateAllU
     }
 
     const createNewBug = (e) => {
+        console.log(dueDate)
         e.preventDefault();
         const inputs = {
             bug,
@@ -94,7 +95,7 @@ const CreateBug = ({showProjectForm, updateShowProjectForm, allUsers, updateAllU
                     selected={dueDate}
                     onChange={ date => setDueDate(date) }
                     name="startDate"
-                    dateFormat="MM/dd/yyyy"
+                    dateFormat="MM-dd-yyyy"
                     className="form-control"
                 />
             </div>

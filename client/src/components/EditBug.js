@@ -4,11 +4,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import Header from './Header';
 import { useParams } from "react-router-dom";
 import { Link, useNavigate } from "react-router-dom";
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
 
-const BugForm = () => {
+const EditBug = () => {
     const [bugDetails, updateBugDetails] = useState([]);
     const [bugTitle, updateBugTitle] = useState("");
     const [bugDescription, updateBugDescription] = useState("");
+    const [dueDate, updateDueDate] = useState();
     const navigate = useNavigate();
 
     const dispatch = useDispatch(); 
@@ -21,6 +24,7 @@ const BugForm = () => {
     const descriptionArea = useRef();
     const textAreaBtn = useRef();
     const headlineBtn = useRef();
+    const dateBtn = useRef();
 
     //Get single bug
     useEffect(() => {
@@ -37,9 +41,12 @@ const BugForm = () => {
             }
     
             if(data.authenticated === true) {
-                updateBugDetails(data.bug[0]);
-                updateBugTitle(data.bug[0].bug_name);
-                updateBugDescription(data.bug[0].bug_description);
+                let bug  = data.bug[0];
+
+                updateBugDetails(bug);
+                updateBugTitle(bug.bug_name);
+                updateBugDescription(bug.bug_description);
+                updateDueDate(new Date(bug.due_date));
             }
     
         });
@@ -63,7 +70,6 @@ const BugForm = () => {
     
             if(data.authenticated === true) {
                 headlineBtn.current.classList.remove('show-btn');
-                // console.log(data.message);
             }
     
         });
@@ -87,12 +93,34 @@ const BugForm = () => {
     
             if(data.authenticated === true) {
                 textAreaBtn.current.classList.remove('show-btn');
-                // console.log(data.message);
             }
     
         });
     }
+
+    const saveDate = () => {
+        console.log('saved!');
+
+        const options = {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json',  "Authorization" : `Bearer ${token}` },
+            body: JSON.stringify({ due_date: dueDate, id: id })
+        };
     
+        fetch('/update-bug-date/', options)
+        .then(response => response.json())
+        .then(data => { 
+            if(data.authenticated === false) {
+                dispatch(logOutUser());
+            }
+    
+            if(data.authenticated === true) {
+                console.log(data.message)
+            }
+    
+        });
+    }
+ 
     const deleteBug = (e) => {
         e.preventDefault();
 
@@ -132,6 +160,7 @@ const BugForm = () => {
     }
 
 
+
     return(
         <form className="bug-edit-form">
             <div className="form-group">
@@ -142,7 +171,15 @@ const BugForm = () => {
             
             <div className="form-group">
                 <h3>Due Date</h3>
-                
+                <DatePicker
+                    placeholderText={dueDate}
+                    selected={dueDate}
+                    onChange={ (date) => { updateDueDate(date); saveDate()} }
+                    name="startDate"
+                    dateFormat="MM-dd-yyyy"
+                    className="form-control"
+                />
+                {/* <button ref={dateBtn} onClick={saveDate} className="form-control bug-date-save">Save</button> */}
             </div>
 
             <div className="form-group">
@@ -156,4 +193,4 @@ const BugForm = () => {
     )
 }
 
-export default BugForm
+export default EditBug

@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Header from './Header';
 import { useParams } from "react-router-dom";
 import { Link, useNavigate } from "react-router-dom";
-import BugForm from "./BugForm";
+import EditBug from "./EditBug";
 import Logo from "./Logo";
 
 const Bug = () => {
@@ -65,7 +65,7 @@ const Bug = () => {
 
             <div className="col col-md-6 col-right">
                 <div className="bug-card">
-                    {isLoggedIn === true ? <BugForm /> : redirectToLoginForm()} 
+                    {isLoggedIn === true ? <EditBug /> : redirectToLoginForm()} 
                 </div>
             </div>
         </div>
