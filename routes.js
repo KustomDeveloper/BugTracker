@@ -146,6 +146,29 @@ app.get('/dashboard', authenticateToken, (req, res) => {
     });
 })
 
+
+//  @desc   Get Project Name
+//  @route  get /get-project-name
+//  @access Private
+app.get("/get-project-name/:id", authenticateToken, async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        token = req.headers.authorization.split(' ')[1];
+        const userData = jwt.decode(token);
+        const bug = await Bug.findById(id);
+        
+        res.status(200).json({
+            authenticated: true,
+            project_name: bug.project_name
+        });
+      
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
+
+
 //  @desc   Show Projects
 //  @route  get /projects
 //  @access Private
@@ -328,6 +351,27 @@ app.put('/update-bug-title/', authenticateToken, async (req, res) => {
     }
 
 });
+//  @desc   Update Bug Assignee
+//  @route  PUT /update-bug-assigned-to
+//  @access Private
+app.put('/update-bug-assigned-to/', authenticateToken, async (req, res) => {
+    const bugAssignedTo = req.body.assigned_to;
+    console.log(bugAssignedTo)
+    const id = req.body.id;
+
+    try {
+        await Bug.updateOne({ _id: id }, { assigned_to: bugAssignedTo });
+
+        res.status(200).json({
+            authenticated: true,
+            message: "Assignee Updated."
+        });
+                
+    } catch(err) {
+        console.log(err);
+    }
+
+});
 
 //  @desc   Update Bug Description
 //  @route  PUT /update-bug-description
@@ -350,14 +394,12 @@ app.put('/update-bug-description/', authenticateToken, async (req, res) => {
 
 });
 
-//  @desc   Update Bug Date
+//  @desc   Update Bug Due Date
 //  @route  PUT /update-bug-date
 //  @access Private
 app.put('/update-bug-date/', authenticateToken, async (req, res) => {
     const id = req.body.id;
     const dueDate = req.body.due_date;
-
-    console.log(id, dueDate)
 
     try {
         await Bug.updateOne({ _id: id }, { due_date: dueDate });
@@ -365,6 +407,27 @@ app.put('/update-bug-date/', authenticateToken, async (req, res) => {
         res.status(200).json({
             authenticated: true,
             message: "Date Updated."
+        });
+                
+    } catch(err) {
+        console.log(err);
+    }
+
+});
+
+//  @desc   Update Bug Project Name
+//  @route  PUT /update-bug-project
+//  @access Private
+app.put('/update-bug-project/', authenticateToken, async (req, res) => {
+    const id = req.body.id;
+    const bugProject = req.body.project;
+
+    try {
+        await Bug.updateOne({ _id: id }, { project_name: bugProject });
+
+        res.status(200).json({
+            authenticated: true,
+            message: "Project Name Updated."
         });
                 
     } catch(err) {

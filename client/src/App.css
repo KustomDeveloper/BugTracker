@@ -249,10 +249,13 @@ tr {
   width: 85px;
   height: 85px;
   display: inline-block;
-  background: #fff;
   text-align: center;
   font-size: 12px;
   font-weight: 700;
+  color: #fff;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 10%);
+  color: #000;
+  background: #F3EBF5;
 }
 .overview {
   display: grid;
@@ -265,21 +268,20 @@ tr {
   padding: 10px 0 5px;
   font-size: 28px;
   font-weight: 900;
+  color: var(--pink);
 }
-.overview .open-bugs {
-  background-color: var(--dark-green);
+.dropzone {
+  border: 2px dashed #eee;
+  border-radius: 5px;
+  height: 100px;
+  width: 100%;
+  padding: 20px;
+  font-size: 15px;
+  color: #777;
+  cursor: pointer;
 }
-.overview .closed-bugs {
-  background-color: var(--mint);
-}
-.overview .overdue-bugs {
-  background-color: var(--light-pink);
-}
-.overview .due-today {
-  background-color: var(--yellow-green);
-}
-.overview .due-in-a-week {
-  background-color: var(--light-green);
+.dropzone-text {
+  text-align: center;
 }
 
 /*Search*/
@@ -460,6 +462,9 @@ a.cp-link {
   color: #fff;
   max-width: 100px;
   margin-left: auto;
+  font-size: 12px;
+  padding: 5px;
+  margin-top: 15px;
 }
 
 .bug-card .bug-delete:hover {
@@ -475,14 +480,73 @@ a.cp-link {
 }
 .col-mid .projects ul li {
   padding: 5px;
+  margin-right: 0;
 }
 
 /*Bug single styling*/
-.bug-single-mid h2 {
-  color: #000;
+.project-name-title {
+  padding: 10px 0 0 10px;
 }
-
+.col.col-md-3.col-mid.bug-single-mid {
+  padding: 0;
+  margin: 0;
+}
+.bug-single-mid h2 {
+  color: #BC2551;
+  font-weight: 700;
+}
 .bug-edit-form h3 {
   color: rgb(173, 168, 168);
   font-size: 13px;
+}
+.edit-project-selector {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: transparent;
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: 10px;
+  margin-left: 15px;
+  cursor:pointer;
+  position: relative;
+  z-index: 2;
+  width: 185px;
+  padding: 1px 5px;
+  border: 1px dashed #ccc;
+  border-radius: 5px;
+}
+.select-wrapper {
+  position: relative;
+  display:inline-block;
+}
+.select-wrapper:after {
+  position: absolute;
+  content: "";
+  background: url("./img/edit-icon.png") no-repeat;
+  width: 16px;
+  height: 16px;
+  right: -20px;
+  bottom: 10px;
+  z-index: 1;
+}
+.edit-project-selector:focus {
+  -webkit-appearance: auto;
+  -moz-appearance: auto;
+  appearance: auto;
+  border:1px solid #eee;
+  background: #fff;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+/*IE11 hide native button*/
+.edit-project-selector::-ms-expand {
+  display: none;
+}
+.edit-project-selector::-ms-expand:focus {
+  display: block;
+}
+.form-control {
+  border: 1px solid #eee;
 }
