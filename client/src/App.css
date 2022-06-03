@@ -356,6 +356,15 @@ tr {
   left: -12px;
 }
 
+/*Project*/
+input[name="project_submit"] {
+  background: #3c3c78;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 3px 15px;
+}
+
 /*Popup*/
 .popup {
   background:#fff;
@@ -457,14 +466,41 @@ a.cp-link {
   opacity: 1;
 }
 
+.form-group.bug-buttons {
+  display: flex;
+}
+
+.form-control.bug-status-btn {
+  max-width: 100px;
+  font-size: 12px;
+  padding: 5px;
+  margin: 15px 0;
+  display: inline-block;
+  text-align: center;
+  text-transform: Capitalize;
+}
+
+.bug-card .bug-open, .bug-card .bug-open:active, .bug-card .bug-open:focus, .bug-card .bug-urgent, .bug-card .bug-urgent:active, .bug-card .bug-urgent:focus {
+  background: #fff;
+  color: #000;
+
+}
+.bug-card .bug-complete, .bug-card .bug-complete:active, .bug-card .bug-complete:focus {
+  background: #777;
+  color: #fff;
+}
+
 .bug-card .bug-delete, .bug-card .bug-delete:active, .bug-card .bug-delete:focus {
   background: var(--pink);
   color: #fff;
   max-width: 100px;
-  margin-left: auto;
   font-size: 12px;
   padding: 5px;
-  margin-top: 15px;
+  margin: 15px 0;
+  display: inline-block;
+  text-align: center;
+  text-transform: Capitalize;
+  margin-left: auto;
 }
 
 .bug-card .bug-delete:hover {

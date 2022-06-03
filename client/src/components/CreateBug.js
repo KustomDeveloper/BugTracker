@@ -71,7 +71,6 @@ const CreateBug = ({showProjectForm, updateShowProjectForm, allUsers, updateAllU
                    <option value="">Choose status</option>
                    <option value="open">Open</option>
                    <option value="urgent">Urgent</option>
-                   <option value="past due">Past Due</option>
                 </select>
             </div>
             <div className="form-group">

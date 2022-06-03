@@ -11,6 +11,8 @@ const EditBug = () => {
     const [allUsers, updateAllUsers] = useState([]);
     const [bugDetails, updateBugDetails] = useState([]);
     const [bugTitle, updateBugTitle] = useState("");
+    const [bugComplete, updateBugComplete] = useState(Boolean);
+    const [bugStatus, updateBugStatus] = useState("");
     const [currentAssignee, updateCurrentAssignee] = useState("");
     const [bugDescription, updateBugDescription] = useState("");
     const [dueDate, updateDueDate] = useState();
@@ -41,13 +43,16 @@ const EditBug = () => {
 
                 updateBugDetails(bug);
                 updateBugTitle(bug.bug_name);
+                updateBugStatus(bug.status);
                 updateBugDescription(bug.bug_description);
                 updateDueDate(new Date(bug.due_date));
                 updateCurrentAssignee(bug.assigned_to);
+                if(bug.status == "complete") updateBugComplete(true)  
+                if(bug.status !== "complete") updateBugComplete(false)  
             }
     
         });
-    }, []);
+    }, [bugComplete]);
 
     //Get Users
     useEffect(() => {
@@ -175,7 +180,56 @@ const EditBug = () => {
             });
 
         }, 1000);
+    }
+ 
+    const completeBug = (e) => {
+        e.preventDefault();
 
+        // Bug Logic For Marking Open or Complete
+        if(bugStatus === "open" || bugStatus === "urgent") {
+            const options = {
+                method: 'Put',
+                headers: { 'Content-Type': 'application/json',  "Authorization" : `Bearer ${token}` },
+                body: JSON.stringify({ id: id, bug_status: "complete" })
+            };
+            fetch('/set-bug-status/', options)
+            .then(response => response.json())
+            .then(data => { 
+                if(data.authenticated === false) {
+                    dispatch(logOutUser());
+                }
+        
+                if(data.authenticated === true) {
+                    // updateBugStatus(data.status);
+                    updateBugComplete(true)
+                    console.log(data.message)
+                }
+            });
+
+        }
+
+        if(bugStatus === "complete") {
+            const options = {
+                method: 'Put',
+                headers: { 'Content-Type': 'application/json',  "Authorization" : `Bearer ${token}` },
+                body: JSON.stringify({ id: id, bug_status: "open" })
+            };
+            fetch('/set-bug-status/', options)
+            .then(response => response.json())
+            .then(data => { 
+                if(data.authenticated === false) {
+                    dispatch(logOutUser());
+                }
+        
+                if(data.authenticated === true) {
+                    // navigate('/dashboard');
+                    // updateBugStatus(data.status);
+                    updateBugComplete(false)
+                    console.log(data.message)
+                }
+            });
+
+        }
 
     }
  
@@ -209,6 +263,10 @@ const EditBug = () => {
 
     return(
         <form className="bug-edit-form">
+            <div className="form-group bug-buttons">
+                <button onClick={completeBug} className={`form-control bug-status-btn bug-${bugStatus}`}>{bugStatus == "complete" ? "Completed" : "Mark Complete"}</button>
+                <button onClick={deleteBug} className="form-control bug-delete">Delete Bug</button>
+            </div>
             <div className="form-group">
                 <h3>Title</h3>
                 <input className="form-control" value={bugTitle} onChange={e => saveTitle(e) }></input>
@@ -245,7 +303,6 @@ const EditBug = () => {
                 <DropZone />
             </div>
 
-            <button onClick={deleteBug} className="form-control bug-delete">Delete Bug</button>
         </form>
     )
 }

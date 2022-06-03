@@ -7,12 +7,72 @@ const authenticateToken =  require('./AuthMiddleware');
 const { body, validationResult } = require('express-validator');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
+const DIR = './public/';
 
 const app = express();
-
 app.use(express.json());
 
 const { auth: { token_secret } } = config;
+
+//File Upload
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, DIR);
+    },
+    filename: (req, file, cb) => {
+        const fileName = file.originalname.toLowerCase().split(' ').join('-');
+        cb(null, uuidv4() + '-' + fileName)
+    }
+});
+var upload = multer({
+    storage: storage,
+    fileFilter: (req, file, cb) => {
+        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
+            cb(null, true);
+        } else {
+            cb(null, false);
+            return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
+        }
+    }
+});
+
+
+//  @desc   Upload images
+//  @route  PUT /bug-img-upload
+//  @access Private
+app.put('/bug-img-upload', authenticateToken, upload.array('bug-img'), async (req, res) => {
+    const id = req.body.id;
+    const bugStatus = req.body.bug_status;
+
+    try {
+        if(bugStatus === "complete")  {
+            await Bug.updateOne({ _id: id}, {status: 'open' });
+            
+            res.status(200).json({
+                authenticated: true,
+                status: 'open',
+                message: "Bug marked open."
+            });
+
+        } else {
+            await Bug.updateOne({ _id: id}, {status: bugStatus });
+                
+            res.status(200).json({
+                authenticated: true,
+                status: bugStatus,
+                message: "Bug marked complete."
+            });
+
+        }
+
+                
+    } catch(err) {
+        console.log(err);
+    }
+});
+
+
 
 //  @desc   Check login status
 //  @route  get /check-login-status
@@ -436,6 +496,25 @@ app.put('/update-bug-project/', authenticateToken, async (req, res) => {
 
 });
 
+
+//  @desc   Set Bug Status
+//  @route  PUT /set-bug-status
+//  @access Private
+app.put('/set-bug-status/', authenticateToken, async (req, res) => {
+    const id = req.body.id;
+    const bugStatus = req.body.bug_status;
+
+    try {
+        await Bug.updateOne({ _id: id}, {status: bugStatus });
+            res.status(200).json({
+                authenticated: true,
+                message: `Bug marked ${bugStatus}.`
+            });
+                
+    } catch(err) {
+        console.log(err);
+    }
+});
 
 //  @desc   Delete Bug
 //  @route  DELETE /delete-bug

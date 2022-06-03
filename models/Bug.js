@@ -28,7 +28,8 @@ const BugSchema = new mongoose.Schema({
     bug_description: {
         type: String,
         required: true
-    }
+    },
+    bug_img: [ String ]
 });
   
 const Bug = mongoose.model('Bug', BugSchema);
