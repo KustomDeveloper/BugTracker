@@ -186,7 +186,7 @@ const EditBug = () => {
         e.preventDefault();
 
         // Bug Logic For Marking Open or Complete
-        if(bugStatus === "open" || bugStatus === "urgent") {
+        if(bugStatus !== "complete") {
             const options = {
                 method: 'Put',
                 headers: { 'Content-Type': 'application/json',  "Authorization" : `Bearer ${token}` },
@@ -200,9 +200,9 @@ const EditBug = () => {
                 }
         
                 if(data.authenticated === true) {
-                    // updateBugStatus(data.status);
-                    updateBugComplete(true)
-                    console.log(data.message)
+                    updateBugComplete(true);
+                    console.log(data.message);
+                    navigate('/dashboard');
                 }
             });
 
@@ -222,8 +222,6 @@ const EditBug = () => {
                 }
         
                 if(data.authenticated === true) {
-                    // navigate('/dashboard');
-                    // updateBugStatus(data.status);
                     updateBugComplete(false)
                     console.log(data.message)
                 }

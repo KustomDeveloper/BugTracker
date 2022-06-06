@@ -8,7 +8,7 @@ const { body, validationResult } = require('express-validator');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
-const DIR = './public/';
+const DIR = './public/bug_images/';
 
 const app = express();
 app.use(express.json());
@@ -42,30 +42,10 @@ var upload = multer({
 //  @route  PUT /bug-img-upload
 //  @access Private
 app.put('/bug-img-upload', authenticateToken, upload.array('bug-img'), async (req, res) => {
-    const id = req.body.id;
-    const bugStatus = req.body.bug_status;
+    // const id = req.body.id;
 
     try {
-        if(bugStatus === "complete")  {
-            await Bug.updateOne({ _id: id}, {status: 'open' });
-            
-            res.status(200).json({
-                authenticated: true,
-                status: 'open',
-                message: "Bug marked open."
-            });
-
-        } else {
-            await Bug.updateOne({ _id: id}, {status: bugStatus });
-                
-            res.status(200).json({
-                authenticated: true,
-                status: bugStatus,
-                message: "Bug marked complete."
-            });
-
-        }
-
+        
                 
     } catch(err) {
         console.log(err);
