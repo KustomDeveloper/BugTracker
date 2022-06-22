@@ -7,50 +7,43 @@ const authenticateToken =  require('./AuthMiddleware');
 const { body, validationResult } = require('express-validator');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
+
+// Img Uploads
 const multer = require('multer');
-const DIR = './public/bug_images/';
+const upload = multer({ dest:'/uploads'});
 
+// Express JS
 const app = express();
-app.use(express.json());
-
-const { auth: { token_secret } } = config;
-
-//File Upload
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, DIR);
-    },
-    filename: (req, file, cb) => {
-        const fileName = file.originalname.toLowerCase().split(' ').join('-');
-        cb(null, uuidv4() + '-' + fileName)
-    }
-});
-var upload = multer({
-    storage: storage,
-    fileFilter: (req, file, cb) => {
-        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
-            cb(null, true);
-        } else {
-            cb(null, false);
-            return cb(new Error('Only .png, .jpg and .jpeg format allowed!'));
-        }
-    }
-});
-
 
 //  @desc   Upload images
 //  @route  PUT /bug-img-upload
 //  @access Private
-app.put('/bug-img-upload', authenticateToken, upload.array('bug-img'), async (req, res) => {
+app.put('/bug-img-upload', authenticateToken, upload.array('file'), async (req, res) => {
     // const id = req.body.id;
-
+    console.log(req.body);
     try {
-        
-                
+        // if (!req.file.mimetype.startsWith('image/')) {
+        //     return res.status(422).json({
+        //       error :'The uploaded file must be an image'
+        //     });
+        // }
+
+        return res.status(200).json({
+            authenticated: true,
+            file: req.body
+        });
+       
     } catch(err) {
         console.log(err);
     }
 });
+
+app.use(express.json());
+
+const { auth: { token_secret } } = config;
+
+
+
 
 
 

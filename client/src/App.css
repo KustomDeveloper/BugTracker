@@ -586,3 +586,8 @@ a.cp-link {
 .form-control {
   border: 1px solid #eee;
 }
+
+.dropzone-errors {
+  margin-top: 40px;
+  font-size: 13px;
+}

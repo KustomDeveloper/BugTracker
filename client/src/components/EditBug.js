@@ -260,7 +260,7 @@ const EditBug = () => {
 
 
     return(
-        <form className="bug-edit-form">
+        <form className="bug-edit-form" encType="multipart/form-data">
             <div className="form-group bug-buttons">
                 <button onClick={completeBug} className={`form-control bug-status-btn bug-${bugStatus}`}>{bugStatus == "complete" ? "Completed" : "Mark Complete"}</button>
                 <button onClick={deleteBug} className="form-control bug-delete">Delete Bug</button>
