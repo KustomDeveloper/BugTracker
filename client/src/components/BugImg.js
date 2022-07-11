@@ -31,7 +31,7 @@ const BugImg = ({bugId}) => {
                     images.push(item[0])
                 })
 
-                updateBugScreenshots(images);
+                updateBugScreenshots(imageArray);
             }
             
         });
