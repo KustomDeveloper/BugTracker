@@ -37,17 +37,42 @@ const BugImg = ({bugId}) => {
         });
     }, [])
 
-    const deleteScreenshot = (e) => {
+    // console.log(bugId)
+
+    const deleteScreenshot = (e, bugId) => {
+        e.preventDefault();
+        console.log(bugId)
+
         const url = e.target.getAttribute('img-data');  
 
-        console.log(url)
+        let isConfirmed = window.confirm("Are you sure you want to delete this Screenshot?");
+ 
+        if(isConfirmed === true) {
+            const options = {
+                method: 'Delete',
+                headers: { 'Content-Type': 'application/json',  "Authorization" : `Bearer ${token}` },
+                body: JSON.stringify({ url : url, id : bugId })
+            };
+        
+            fetch('/delete-screenshot', options)
+            .then(response => response.json())
+            .then(data => { 
+                if(data.authenticated === false) {
+                    dispatch(logOutUser());
+                }
+        
+                if(data.authenticated === true) {
+                    
+                }
+            });
+        }
 
     }
     
     return(
         <>
         {bugScreenshots ? bugScreenshots.map((img, key) => 
-            <div key={key} className="screenshot-container"><img className="bug-screenshot"  src={img} /><a img-data={img} onClick={e => deleteScreenshot(e)} className="image-close-btn"></a></div>
+            <div key={key} className="screenshot-container"><img className="bug-screenshot"  src={img} /><a img-data={img} onClick={e => deleteScreenshot(e, bugId)} className="image-close-btn"></a></div>
         ) : null}
             
         </>
