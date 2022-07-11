@@ -16,12 +16,11 @@ const DropZone = () => {
 
         data.append('id', id);
         data.append('path', acceptedFiles[0].path);
-    
-        console.log(data.entries());
+        data.append('screenshot', acceptedFiles[0]);
 
         // Do something with the files
         const options = {
-            method: 'PUT',
+            method: 'POST',
             headers: { 'Enc-Type': 'multipart/form-data', "Authorization" : `Bearer ${token}` },
             body: data
         }
@@ -59,10 +58,8 @@ const DropZone = () => {
         maxSize: 5242880
     })
 
-
   const fileRejectionItems = fileRejections.map(({ file, errors }) => (
     <div key={file.path}>
-      {/* {file.path} - {file.size} bytes */}
       <ul className="dropzone-errors">
         {errors.map(e => (
           <li key={e.code}>{e.message}</li>
@@ -71,15 +68,9 @@ const DropZone = () => {
     </div>
   ));
 
-//   const acceptedFileItems = acceptedFiles.map(file => (
-//     <li key={file.path}>
-//       {file.path} - {file.size} bytes
-//     </li>
-//   ));
-
   return (
     <div className="dropzone" {...getRootProps()}>
-      <input name="file" {...getInputProps()} />
+      <input name="screenshot" {...getInputProps()} />
       {
         isDragActive ?
           <p className="dropzone-text">Drop it like it's hot!</p> :

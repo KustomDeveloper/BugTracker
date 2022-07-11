@@ -10,42 +10,70 @@ const jwt = require('jsonwebtoken');
 
 // Img Uploads
 const multer = require('multer');
-const upload = multer({ dest:'/uploads'});
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'uploads/')
+    },
+    filename: function (req, file, cb) {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+      cb(null, file.fieldname + '-' + uniqueSuffix + '-' + file.originalname)
+    }
+})
+  
+const upload = multer({ storage: storage });
 
 // Express JS
 const app = express();
-
-//  @desc   Upload images
-//  @route  PUT /bug-img-upload
-//  @access Private
-app.put('/bug-img-upload', authenticateToken, upload.array('file'), async (req, res) => {
-    // const id = req.body.id;
-    console.log(req.body);
-    try {
-        // if (!req.file.mimetype.startsWith('image/')) {
-        //     return res.status(422).json({
-        //       error :'The uploaded file must be an image'
-        //     });
-        // }
-
-        return res.status(200).json({
-            authenticated: true,
-            file: req.body
-        });
-       
-    } catch(err) {
-        console.log(err);
-    }
-});
-
 app.use(express.json());
 
 const { auth: { token_secret } } = config;
 
+//  @desc   Upload images
+//  @route  POST /bug-img-upload
+//  @access Private
+app.post('/bug-img-upload', authenticateToken, upload.single('screenshot'), async (req, res) => {
 
+    //No Img
+    if(!req.file) return res.status(400).json({aunthenticated: true, error: 'No Img was found!'})
 
+    //Has Img
+    if(req.file) {
+        const url = req.protocol + '://' + req.get('host');
+        const imgDir = req.file.destination
+        const fullUrl = url + '/' + imgDir + req.file.filename;
 
+        try {
+            const findBug = await Bug.updateOne(
+                { _id: req.body.id }, 
+                { $addToSet: { bug_img: fullUrl }  }
+            )
+            console.log(findBug)
 
+            res.status(200).json({
+                authenticated: true,
+                img: fullUrl
+
+            });
+        
+        } catch(err) {
+            console.log(err);
+        }
+    }
+});
+
+//  @desc   Get Bug Images
+//  @route  get /bug-images
+//  @access Private
+app.get("/bug-images/:id", authenticateToken, async (req, res) => {
+    const findImages = await Bug.findOne({ _id: req.params.id});
+
+    res.status(200).json({
+        authenticated: true,
+        images: findImages, 
+    });
+
+});
 
 //  @desc   Check login status
 //  @route  get /check-login-status

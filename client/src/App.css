@@ -16,6 +16,7 @@ body {
   background-color: #435165 !important;
   font-family: 'Lato', sans-serif;
   overflow-x: hidden;
+  overflow-y:hidden;
 }
 
 .container {
@@ -205,6 +206,9 @@ table.status thead {
 .col-right {
   background-color: #fff;
   color: #000;
+}
+.col.col-md-6.col-right {
+  overflow-y: scroll;
 }
 
 /*Full height columns*/
@@ -591,3 +595,23 @@ a.cp-link {
   margin-top: 40px;
   font-size: 13px;
 }
+
+/*Screenshots*/
+.bug-screenshot {
+  width: 100%;
+  max-width: 100%;
+  margin: 20px 0;
+}
+
+.screenshot-container {
+  position: relative;
+}
+.image-close-btn {
+  background: url("./img/close-x.png") no-repeat;
+  width: 32px;
+  height: 32px;
+  position: absolute;
+  right: 0px;
+  top: 20px;
+}
+

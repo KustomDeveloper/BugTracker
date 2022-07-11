@@ -2,6 +2,7 @@ import React, {useEffect, useState, useRef} from "react";
 import { logOutUser } from '../actions';
 import { useSelector, useDispatch } from 'react-redux';
 import Header from './Header';
+import BugImg from './BugImg';
 import { useParams } from "react-router-dom";
 import { Link, useNavigate } from "react-router-dom";
 import DatePicker from 'react-datepicker';
@@ -16,6 +17,8 @@ const EditBug = () => {
     const [currentAssignee, updateCurrentAssignee] = useState("");
     const [bugDescription, updateBugDescription] = useState("");
     const [dueDate, updateDueDate] = useState();
+    const [bugImages, updateBugImages] = useState([]);
+
     const navigate = useNavigate();
 
     const dispatch = useDispatch(); 
@@ -47,6 +50,7 @@ const EditBug = () => {
                 updateBugDescription(bug.bug_description);
                 updateDueDate(new Date(bug.due_date));
                 updateCurrentAssignee(bug.assigned_to);
+                updateBugImages(bug.bug_img);
                 if(bug.status == "complete") updateBugComplete(true)  
                 if(bug.status !== "complete") updateBugComplete(false)  
             }
@@ -300,6 +304,8 @@ const EditBug = () => {
                 <h3>Add images</h3>
                 <DropZone />
             </div>
+
+            <BugImg bugId={id} />
 
         </form>
     )
