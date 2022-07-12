@@ -33,7 +33,7 @@ const DropZone = () => {
             }
     
             if(data.authenticated === true) {
-                // console.log(data)
+              window.location.reload(false);
             }
         });
 

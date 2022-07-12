@@ -598,9 +598,11 @@ a.cp-link {
 
 /*Screenshots*/
 .bug-screenshot {
-  width: 100%;
-  max-width: 100%;
-  margin: 20px 0;
+    max-width: 100%;
+    display: block;
+    margin: 20px auto;
+    background: #eee;
+    padding: 20px;
 }
 
 .screenshot-container {
@@ -612,6 +614,7 @@ a.cp-link {
   height: 32px;
   position: absolute;
   right: 0px;
-  top: 20px;
+  top: 0px;
+  cursor: pointer;
 }
 

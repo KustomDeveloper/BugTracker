@@ -79,14 +79,10 @@ app.get("/bug-images/:id", authenticateToken, async (req, res) => {
 //  @route  delete /delete-screenshot
 //  @access Private
 app.delete("/delete-screenshot", authenticateToken, async (req, res) => {
-
-    // console.log(req.body.url)
     const url = req.body.url;
     const id = req.body.id;
 
-    const deleteImg = Bug.updateOne({_id: id }, {$pull: { bug_img: { url } } })
-
-    console.log(deleteImg)
+    const deleteImg = await Bug.updateOne({_id: id }, {$pull: { bug_img:  url }} )
 
     res.status(200).json({
         authenticated: true

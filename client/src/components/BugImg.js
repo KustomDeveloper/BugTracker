@@ -32,6 +32,7 @@ const BugImg = ({bugId}) => {
                 })
 
                 updateBugScreenshots(imageArray);
+
             }
             
         });
@@ -62,7 +63,7 @@ const BugImg = ({bugId}) => {
                 }
         
                 if(data.authenticated === true) {
-                    
+                    window.location.reload(false);
                 }
             });
         }
