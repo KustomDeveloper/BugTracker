@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from "react";
-import { useSelector, useDispatch } from 'react-redux';
+import React, {useEffect, useState, useRef} from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { logOutUser } from '../actions';
 import { useParams } from "react-router-dom";
+import LightBox from "./LightBox";
 
 const BugImg = ({bugId}) => {
     const [bugScreenshots, updateBugScreenshots] = useState([]);
@@ -72,8 +73,9 @@ const BugImg = ({bugId}) => {
     
     return(
         <>
+       
         {bugScreenshots ? bugScreenshots.map((img, key) => 
-            <div key={key} className="screenshot-container"><img className="bug-screenshot"  src={img} /><a img-data={img} onClick={e => deleteScreenshot(e, bugId)} className="image-close-btn"></a></div>
+            <div key={key} className="screenshot-container"><LightBox src={img}><img className="bug-screenshot"  src={img} /></LightBox><a img-data={img} onClick={e => deleteScreenshot(e, bugId)} className="image-close-btn"></a></div>
         ) : null}
             
         </>

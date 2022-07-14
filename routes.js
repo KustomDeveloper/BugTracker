@@ -7,6 +7,7 @@ const authenticateToken =  require('./AuthMiddleware');
 const { body, validationResult } = require('express-validator');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
+const fs = require('fs');
 
 // Img Uploads
 const multer = require('multer');
@@ -48,7 +49,6 @@ app.post('/bug-img-upload', authenticateToken, upload.single('screenshot'), asyn
                 { _id: req.body.id }, 
                 { $addToSet: { bug_img: fullUrl }  }
             )
-            console.log(findBug)
 
             res.status(200).json({
                 authenticated: true,
@@ -81,8 +81,15 @@ app.get("/bug-images/:id", authenticateToken, async (req, res) => {
 app.delete("/delete-screenshot", authenticateToken, async (req, res) => {
     const url = req.body.url;
     const id = req.body.id;
+    const imgName = url.substring(url.lastIndexOf('/') + 1)
+    const path = __dirname + '\\' + 'uploads' + '\\' + imgName;
 
     const deleteImg = await Bug.updateOne({_id: id }, {$pull: { bug_img:  url }} )
+
+    fs.unlink(path, (err) => {
+        if (err) throw err;
+        // if no error, file has been deleted successfully
+    });
 
     res.status(200).json({
         authenticated: true

@@ -19,6 +19,10 @@ body {
   overflow-y:hidden;
 }
 
+.body-overflow {
+  overflow-y: scroll;
+}
+
 .container {
   width: 100%;
   max-width: 1200px;
@@ -604,6 +608,7 @@ a.cp-link {
     margin: 20px auto;
     background: #eee;
     padding: 20px;
+    cursor: pointer;
 }
 
 .screenshot-container {
@@ -626,4 +631,42 @@ label {
   text-transform: uppercase;
   font-weight: 900;
   letter-spacing: 0.5px;
+}
+
+/*Lightbox*/
+.lightbox-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0,0,0,0.7);
+  cursor: pointer;
+  z-index: 100;
+  overflow-y: scroll;
+}
+.lightbox-img {
+  width: 100%;
+  max-width: 700px;
+  height: auto;
+  display: block;
+  margin: 30px auto;
+  cursor: pointer;
+}
+
+/*Increase/decrease*/
+#img-increase img, #img-decrease img {
+  z-index: 500;
+  max-width: 38px;
+}
+.lightbox-controls {
+  z-index: 300;
+  background: #000;
+  width: 100%;
+  max-width: 300px;
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding: 10px;
+  padding-left: 50px;
 }
