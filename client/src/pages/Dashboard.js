@@ -9,7 +9,7 @@ import {logInUser, setUsername} from '../actions';
 const Dashboard = () => {
     const token = localStorage.getItem('token');
     const isLoggedIn = useSelector(state => state.auth);
-    const dispatch = useDispatch(); 
+    const dispatch = useDispatch();
 
 
     useEffect(() => {

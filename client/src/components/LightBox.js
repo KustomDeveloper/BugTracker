@@ -3,11 +3,9 @@ import React, {useState, useRef, useEffect} from "react";
 const LightBox = ({children, src, alt, Wrapper = 'div'}) => {
     const [isOpen, setIsOpen] = useState(false);
     const [scaleImg, setScaleImg] = useState(1);
-    const [screenshotUrl, setScreenshotUrl] = useState('');
 
     //refs
     const screenshotImg = useRef(null);
-    const download = useRef(null);
 
     const toggleIsOpen = () => {
         setScaleImg(1);
@@ -28,23 +26,6 @@ const LightBox = ({children, src, alt, Wrapper = 'div'}) => {
         }
     }
 
-    // const downloadImg = (e) => {
-    //     e.preventDefault();
-    //     const url = screenshotImg.current.getAttribute('src');
-    //     download.current.href = url;
-    //     console.log(e.target)
-    //     download.current.focus()
-    // }
-
-    // useEffect(() => {
-    //     setTimeout(() => {
-    //         const url = screenshotImg.current.getAttribute('src');
-    //         download.current.href = url;
-    //     }, 3000)
-    // }, [])
-
-    // onClick={e => downloadImg(e)}
-
     return (
         <>
         {isOpen ?
@@ -54,7 +35,6 @@ const LightBox = ({children, src, alt, Wrapper = 'div'}) => {
             <div className="lightbox-controls"> 
                 <a id="img-increase" href="null" onClick={e => increase(e)}><img alt='icon' src={require('../img/increase.png')} /></a>
                 <a id="img-decrease" href="null" onClick={e => decrease(e)}><img alt='icon' src={require('../img/decrease.png')} /></a>
-                <a ref={download}  id="download-img"  href='null' download="screenshot"><img alt='icon' src={require('../img/download.png')} /></a>
             </div>
         </>
        : null}

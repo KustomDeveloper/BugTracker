@@ -88,7 +88,7 @@ const Authorized = () => {
         <hr />
 
         <ul className="screen-options">
-          <li className="selected"><i className="fa fa-bug" aria-hidden="true"></i> Bugs</li>
+          <li className="selected"><i className="fa fa-tachometer" aria-hidden="true"></i> Dashboard</li>
         </ul>
 
         <button className="settings">Settings</button>
@@ -131,7 +131,6 @@ const Authorized = () => {
           </thead>
           <tbody>
 
-           
             {tabSelected === "allprojects" && allBugs.length >= 1 ? <AllProjects allBugs={allBugs} username={username} tabSelected={tabSelected} /> : null }
 
             {tabSelected === tabSelected && allBugs.length >= 1 ? <SelectedProject allBugs={allBugs} username={username} tabSelected={tabSelected}  /> : null }

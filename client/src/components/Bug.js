@@ -125,7 +125,8 @@ const Bug = () => {
                 <hr />
 
                 <ul className="screen-options">
-                    <li className="selected"><i className="fa fa-bug" aria-hidden="true"></i> Bugs</li>
+                    <Link to="/dashboard"><li className="unselected"><i className="fa fa-tachometer" aria-hidden="true"></i> Dashboard</li></Link>
+                    <li className="selected"><i className="fa fa-bug" aria-hidden="true"></i> Bug</li>
                 </ul>
 
                 <button className="settings">Settings</button>
