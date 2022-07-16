@@ -26,6 +26,10 @@ const CreateProject = ({showProjectForm, updateShowProjectForm, showModal, updat
                 if(data.authenticated === true) {
                     updateShowModal(false);
                     updateShowProjectForm(false);
+
+                    //Hack to refresh without reload
+                    navigate('/')
+                    navigate('/dashboard')
                 }
 
         });

@@ -30,7 +30,7 @@ const PopUpForm = ({ allUsers, updateAllUsers, showModal, updateShowModal, allPr
                   animate="visible">
 
                     <div className="popup">
-                        <div onClick={e => ClosePopup(e)} className="closeButton">X</div>
+                        <div onClick={e => ClosePopup(e)} className="closeButton"><i class="fa fa-times-circle-o" aria-hidden="true"></i></div>
 
                         {allProjects.length && showProjectForm === false >= 1 ? <CreateBug showProjectForm={showProjectForm} updateShowProjectForm={updateShowProjectForm} allUsers={allUsers} updateAllUsers={updateAllUsers} updateShowModal={updateShowModal} allProjects={allProjects} updateAllProjects={updateAllProjects}/> : <CreateProject showProjectForm={showProjectForm} updateShowProjectForm={updateShowProjectForm} showModal={showModal} updateShowModal={updateShowModal} />}
 

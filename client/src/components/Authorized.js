@@ -28,6 +28,7 @@ const Authorized = () => {
     fetch('/projects', projectOptions)
     .then(response => response.json())
     .then(data => { 
+
         if(data.authenticated === false) dispatch(logOutUser());
 
         if(data.authenticated === true) {
@@ -36,7 +37,7 @@ const Authorized = () => {
 
     });
 
-  }, [allProjects])
+  }, [])
 
   useEffect(() => {
     //GET BUGS
@@ -56,7 +57,7 @@ const Authorized = () => {
 
     });
     
-  }, [allBugs])
+  }, [])
 
   useEffect(() => {
     //GET USERS
@@ -76,11 +77,45 @@ const Authorized = () => {
 
     });
 
-  }, [allUsers])
+  }, [])
+
+  const overdueBugs = (bugs) => {
+    const array = [];
+
+    //get todays date in correct format
+    let today = new Date();
+    today = today.toISOString();
+    today = today.substr(0,10)
+    bugs.forEach(bug => array.push(bug.due_date.substr(0,10)))
+
+    const newArray = array.filter(bug => bug < today)
+
+    return newArray.length;
+  }
+
+  const dueTodayBugs = (bugs) => {
+    const array = [];
+
+    //get todays date in correct format
+    let today = new Date();
+    today = today.toISOString();
+    today = today.substr(0,10)
+    bugs.forEach(bug => array.push(bug.due_date.substr(0,10)))
+
+    console.log(array, today)
+
+    const newArray = array.filter(bug => bug == today)
+
+
+
+    return newArray.length;
+  }
 
 
   return(
+ 
     <div className="dashboard row h-100">
+        
       <AddBug allUsers={allUsers} updateAllUsers={updateAllUsers} allProjects={allProjects} updateAllProjects={updateAllProjects}/>
       <div className="col col-md-3 col-left">
         <Logo />
@@ -113,10 +148,10 @@ const Authorized = () => {
       <h1>My Bugs</h1>
         <hr />
         <div className="overview">
-          <div className="grid-item open-bugs"><span className="count">36</span>Open Bugs</div>
-          <div className="grid-item overdue-bugs"><span className="count">12</span>Overdue</div>
-          <div className="grid-item due-today"><span className="count">18</span>Due Today</div>
-          <div className="grid-item due-in-a-week"><span className="count">08</span>Due in 7 Days</div>
+          <div className="grid-item open-bugs"><span className="count">{allBugs.length > 0 ? allBugs.length : '0' }</span>Total Bugs</div>
+          <div className="grid-item overdue-bugs"><span className="count">{allBugs.length > 0 ?  overdueBugs(allBugs) : '0' }</span>Overdue</div>
+          <div className="grid-item due-today"><span className="count">{allBugs.length > 0 ?  dueTodayBugs(allBugs) : '0' }</span>Due Today</div>
+          {/* <div className="grid-item due-in-a-week"><span className="count">08</span>Due this week</div> */}
         </div>
         <hr />
 

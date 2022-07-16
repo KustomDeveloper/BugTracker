@@ -144,6 +144,11 @@ table.status th h3 {
 table.status thead {
   background-color: #fff;
 }
+table.status a {
+  color: var(--pink);
+  text-decoration: none;
+  font-weight: bold;
+}
 
 
 /*col-mid*/
@@ -238,9 +243,11 @@ table.status thead {
 }
 .closeButton {
   position: absolute;
-  right: 25px;
-  top: 15px;
+  right: 15px;
+  top: 0;
   cursor: pointer;
+  font-size:32px;
+  color: var(--pink);
 }
 
 /*Dashboard*/
@@ -395,7 +402,7 @@ input[name="project_submit"] {
   position: absolute;
   border-radius: 5px;
   border: 1px solid #000;
-  top: 0;
+  top: 10px;
   width: 100%;
   padding: 15px 35px;
   max-width: 400px;
@@ -542,6 +549,10 @@ a.cp-link {
 .col-mid .projects ul li {
   padding: 5px;
   margin-right: 0;
+  cursor: pointer;
+}
+.col-mid .projects ul li:hover {
+  color: var(--pink);
 }
 
 /*Bug single styling*/

@@ -385,6 +385,11 @@ app.post('/add-bug', authenticateToken, async (req, res) => {
         const assignTo = req.body.assignTo;
         const bugDescription = req.body.bugDescription
 
+        //Convert Date
+        // const isoStr = dueDate;
+        // const date = new Date(isoStr);
+        // const timeStamp = date.getTime();
+
         token = req.headers.authorization.split(' ')[1];
 
         const userData = jwt.decode(token);

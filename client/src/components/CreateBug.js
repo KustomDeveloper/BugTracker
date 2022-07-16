@@ -21,7 +21,6 @@ const CreateBug = ({showProjectForm, updateShowProjectForm, allUsers, updateAllU
     }
 
     const createNewBug = (e) => {
-        console.log(dueDate)
         e.preventDefault();
         const inputs = {
             bug,
@@ -48,6 +47,10 @@ const CreateBug = ({showProjectForm, updateShowProjectForm, allUsers, updateAllU
                 if(data.authenticated === true) {
                     setBugError("");
                     updateShowModal(false)
+
+                    //Hack to refresh without reload
+                    navigate('/')
+                    navigate('/dashboard')
                 }
 
         });
