@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from 'react-router-dom';
 
@@ -8,14 +7,15 @@ const convertDate = (date) => {
   return + (convertedDate.getMonth()+1) + '-' + convertedDate.getDate() + '-' + convertedDate.getFullYear(); 
 }
 
-const findCompletedBugs = (bugs) => {
-  let convertBugs = bugs;
-  let completeBugs = convertBugs.filter((bug) => bug.status === 'complete');
-
-  return completeBugs.length
-}
 
 const AllProjects = ({allBugs, username, tabSelected}) => {
+
+  const findCompletedBugs = (bugs) => {
+    let filterBugs = bugs;
+    let completeBugs = filterBugs.filter((bug) => bug.status === 'complete' && bug.assigned_to === username.value);
+  
+    return completeBugs.length
+  }
 
     return(
     <>
@@ -31,7 +31,7 @@ const AllProjects = ({allBugs, username, tabSelected}) => {
     )}
     </tbody>
     
-    {allBugs && findCompletedBugs(allBugs) >= 1 ? <th><h3 className="complete-title">COMPLETE</h3></th> : null}
+    {findCompletedBugs(allBugs) >= 1 ? <th><h3 className="complete-title">COMPLETE</h3></th> : null}
 
     <tbody>
     {allBugs.filter((bug) => bug.assigned_to === username.value && tabSelected === "allprojects" && bug.status === 'complete').map((item, key) => (

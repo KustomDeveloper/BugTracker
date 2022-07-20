@@ -79,31 +79,31 @@ const Authorized = () => {
 
   }, [])
 
-  const overdueBugs = (bugs) => {
-    const array = [];
-
-    //get todays date in correct format
-    let today = new Date();
-    today = today.toISOString();
-    today = today.substr(0,10)
-    bugs.forEach(bug => array.push(bug.due_date.substr(0,10)))
-
-    const newArray = array.filter(bug => bug < today)
+  const countAllBugs = (bugs, username) => {
+    const newArray = bugs.filter(bug => bug.assigned_to === username.value && bug.status != 'complete')
 
     return newArray.length;
   }
 
-  const dueTodayBugs = (bugs) => {
-    const array = [];
+  const overdueBugs = (bugs, username) => {
+    //get todays date in correct format
+    let today = new Date();
+    today = today.toISOString();
+    today = today.substr(0,10);
 
+    const myBugs = bugs.filter(bug => bug.assigned_to === username.value && bug.due_date.substr(0,10) < today);
+
+    return myBugs.length;
+  }
+
+  const dueTodayBugs = (bugs, username) => {
     //get todays date in correct format
     let today = new Date();
     today = today.toISOString();
     today = today.substr(0,10)
-    bugs.forEach(bug => array.push(bug.due_date.substr(0,10)))
-    const newArray = array.filter(bug => bug == today)
+    const myBugs = bugs.filter(bug => bug.assigned_to === username.value && bug.due_date.substr(0,10) === today);
 
-    return newArray.length;
+    return myBugs.length;
   }
 
 
@@ -143,9 +143,9 @@ const Authorized = () => {
       <h1>My Bugs</h1>
         <hr />
         <div className="overview">
-          <div className="grid-item open-bugs"><span className="count">{allBugs.length > 0 ? allBugs.length : '0' }</span>Total Bugs</div>
-          <div className="grid-item overdue-bugs"><span className="count">{allBugs.length > 0 ?  overdueBugs(allBugs) : '0' }</span>Overdue</div>
-          <div className="grid-item due-today"><span className="count">{allBugs.length > 0 ?  dueTodayBugs(allBugs) : '0' }</span>Due Today</div>
+          <div className="grid-item open-bugs"><span className="count">{allBugs.length > 0 ? countAllBugs(allBugs, username) : '0' }</span>Total Bugs</div>
+          <div className="grid-item overdue-bugs"><span className="count">{allBugs.length > 0 ?  overdueBugs(allBugs, username) : '0' }</span>Overdue</div>
+          <div className="grid-item due-today"><span className="count">{allBugs.length > 0 ?  dueTodayBugs(allBugs, username) : '0' }</span>Due Today</div>
           {/* <div className="grid-item due-in-a-week"><span className="count">08</span>Due this week</div> */}
         </div>
         <hr />
