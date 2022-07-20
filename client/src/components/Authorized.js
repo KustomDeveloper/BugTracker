@@ -101,12 +101,7 @@ const Authorized = () => {
     today = today.toISOString();
     today = today.substr(0,10)
     bugs.forEach(bug => array.push(bug.due_date.substr(0,10)))
-
-    console.log(array, today)
-
     const newArray = array.filter(bug => bug == today)
-
-
 
     return newArray.length;
   }
@@ -158,19 +153,19 @@ const Authorized = () => {
         <table className="status">
           <thead>
             <tr>
-              <th><h3>BUG</h3></th>
+              <th><h3>OPEN BUGS</h3></th>
               <th><h3>STATUS</h3></th>
               <th><h3>DUE</h3></th>
               <th><h3>ASSIGNED TO</h3></th>
             </tr>
           </thead>
-          <tbody>
+         
 
             {tabSelected === "allprojects" && allBugs.length >= 1 ? <AllProjects allBugs={allBugs} username={username} tabSelected={tabSelected} /> : null }
 
             {tabSelected === tabSelected && allBugs.length >= 1 ? <SelectedProject allBugs={allBugs} username={username} tabSelected={tabSelected}  /> : null }
 
-          </tbody>
+    
         </table>
       </div>
 

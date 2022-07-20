@@ -30,8 +30,6 @@ const LightBox = ({children, src, alt, Wrapper = 'div'}) => {
         <>
         {isOpen ?
         <>
-            {/* {document.body.classList.add('body-overflow')} */}
-
             <div className="lightbox-controls"> 
                 <a id="img-increase" href="null" onClick={e => increase(e)}><img alt='icon' src={require('../img/increase.png')} /></a>
                 <a id="img-decrease" href="null" onClick={e => decrease(e)}><img alt='icon' src={require('../img/decrease.png')} /></a>

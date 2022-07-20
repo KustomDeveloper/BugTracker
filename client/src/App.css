@@ -3,6 +3,7 @@
 }
 :root {
   --dark-purple: #3B173F;
+  --blue: #2868c7;
   --light-purple:#F3EBF5;
   --pink: #BC2551;
   --dark-green: #B3DEC2;
@@ -195,6 +196,7 @@ table.status a {
   font-weight: 900; 
   display: flex;
   position: relative;
+  cursor: pointer;
 }
 .project-count {
   background: rgb(250, 246, 246);
@@ -629,16 +631,18 @@ a.cp-link {
 .dropzone-errors {
   margin-top: 40px;
   font-size: 13px;
+  color: red;
 }
 
 /*Screenshots*/
 .bug-screenshot {
     max-width: 100%;
     display: block;
-    margin: 20px auto;
-    background: #eee;
-    padding: 20px;
+    margin: 40px auto 0;
+    background: #fff;
+    padding: 5px;
     cursor: pointer;
+    box-shadow: 0 0 1px 1px rgba(0,0,0, 0.1)
 }
 
 .screenshot-container {
@@ -652,6 +656,26 @@ a.cp-link {
   right: 0px;
   top: 0px;
   cursor: pointer;
+}
+
+/*Photo Controls*/
+.photo-controls {
+  margin: 5px 0;
+  display: flex;
+}
+.photo-btns {
+  margin-left: auto;
+}
+.photo-controls span {
+  font-size: 13px;
+  color: #777;
+  cursor: pointer;
+}
+.photo-controls span:hover {
+  color: var(--blue);
+}
+.photo-controls span:first-of-type {
+  margin-right: 15px;
 }
 
 /*Form changes*/
@@ -698,4 +722,12 @@ label {
   top: 0;
   right: 0;
   padding: 10px;
+}
+
+/*Completed*/
+h3.complete-title {
+  font-weight: bold;
+  display: block;
+  font-size: 16px;
+  margin-top: 50px;
 }

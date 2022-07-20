@@ -39,8 +39,6 @@ const BugImg = ({bugId}) => {
         });
     }, [])
 
-    // console.log(bugId)
-
     const deleteScreenshot = (e, bugId) => {
         e.preventDefault();
         console.log(bugId)
@@ -70,12 +68,35 @@ const BugImg = ({bugId}) => {
         }
 
     }
+
+    const downloadImg = (e) => {
+        const href = e.target.getAttribute('img-data');
+        var img = href.split('/').pop();
+        console.log(img)
+
+
+        const options = {
+            method: 'GET',
+            headers: { "Authorization" : `Bearer ${token}` },
+        };
     
+        fetch(`/download-img/${img}`, options)
+        .then(response => response.blob())
+        .then(blob => { 
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = img;
+            document.body.appendChild(a);
+            a.click();  
+            a.remove();
+        });
+    }
+ 
     return(
         <>
-       
         {bugScreenshots ? bugScreenshots.map((img, key) => 
-            <div key={key} className="screenshot-container"><LightBox src={img}><img className="bug-screenshot"  src={img} /></LightBox><a img-data={img} onClick={e => deleteScreenshot(e, bugId)} className="image-close-btn"></a></div>
+            <div key={key} className="screenshot-container"><LightBox src={img}><img className="bug-screenshot"  src={img} /></LightBox><div className="photo-controls"><div className="photo-btns"><span img-data={img} onClick={(e) => downloadImg(e)} className="image-download-btn">Download</span><span img-data={img} onClick={e => deleteScreenshot(e, bugId)} className="image-delete-btn">Delete</span></div></div></div>
         ) : null}
             
         </>

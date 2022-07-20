@@ -100,7 +100,7 @@ const EditBug = () => {
             }
     
             if(data.authenticated === true) {
-                console.log(data.message)
+                // console.log(data.message)
             }
     
         });
@@ -125,7 +125,7 @@ const EditBug = () => {
                 }
         
                 if(data.authenticated === true) {
-                    console.log(data.message)
+                    // console.log(data.message)
                 }
             });
 
@@ -152,7 +152,7 @@ const EditBug = () => {
                 }
         
                 if(data.authenticated === true) {
-                    console.log(data.message)
+                    // console.log(data.message)
                 }
         
             });
@@ -178,7 +178,7 @@ const EditBug = () => {
                 }
         
                 if(data.authenticated === true) {
-                    console.log(data.message)
+                    // console.log(data.message)
                 }
         
             });
@@ -205,7 +205,7 @@ const EditBug = () => {
         
                 if(data.authenticated === true) {
                     updateBugComplete(true);
-                    console.log(data.message);
+                    // console.log(data.message);
                     navigate('/dashboard');
                 }
             });
@@ -227,7 +227,7 @@ const EditBug = () => {
         
                 if(data.authenticated === true) {
                     updateBugComplete(false)
-                    console.log(data.message)
+                    // console.log(data.message)
                 }
             });
 

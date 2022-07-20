@@ -8,6 +8,8 @@ const { body, validationResult } = require('express-validator');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
+const path = require('path');
+
 
 // Img Uploads
 const multer = require('multer');
@@ -82,11 +84,11 @@ app.delete("/delete-screenshot", authenticateToken, async (req, res) => {
     const url = req.body.url;
     const id = req.body.id;
     const imgName = url.substring(url.lastIndexOf('/') + 1)
-    const path = __dirname + '\\' + 'uploads' + '\\' + imgName;
+    const filePath = __dirname + '\\' + 'uploads' + '\\' + imgName;
 
     const deleteImg = await Bug.updateOne({_id: id }, {$pull: { bug_img:  url }} )
 
-    fs.unlink(path, (err) => {
+    fs.unlink(filePath, (err) => {
         if (err) throw err;
         // if no error, file has been deleted successfully
     });
@@ -95,6 +97,21 @@ app.delete("/delete-screenshot", authenticateToken, async (req, res) => {
         authenticated: true
     });
 })
+
+//  @desc   Download Screenshot
+//  @route  get /download-img
+//  @access Private
+app.get('/download-img/:id', authenticateToken, async(req, res) => {
+    const imgUrl = req.params.id;
+    const file = path.join(__dirname, `uploads/${imgUrl}`);
+
+    res.download(file, imgUrl, (err) => {
+        if(err)
+        console.log('error: ', err);
+    })
+
+});
+
 
 //  @desc   Check login status
 //  @route  get /check-login-status
