@@ -72,27 +72,34 @@ const RegisterForm = () => {
                         <label>
                         <i className="fa fa-user-o" aria-hidden="true"></i>
                         </label>
+                        
                         <input type="text" name="firstname" 
                             value={firstname}
                             onChange={e => setFirstname(e.target.value)}
                             placeholder="First Name" id="firstname" required />
+
                         <label>
                         <i className="fa fa-user-o" aria-hidden="true"></i>
                         </label>
+
                         <input type="text" name="lastname" 
                             value={lastname}
                             onChange={e => setLastname(e.target.value)}
                             placeholder="Last Name" id="lastname" required />
+
                         <label>
                         <i className="fa fa-user-o" aria-hidden="true"></i>
                         </label>
+
                         <input type="text" name="username" 
                             value={username}
                             onChange={e => setUsername(e.target.value)}
                             placeholder="Username" id="username" required />
+
                         <label>
                         <i className="fa fa-user-o" aria-hidden="true"></i>
                         </label>
+
                         <input type="email" name="email" 
                             value={email}
                             onChange={e => setEmail(e.target.value)}
