@@ -7,9 +7,7 @@ const convertDate = (date) => {
   return + (convertedDate.getMonth()+1) + '-' + convertedDate.getDate() + '-' + convertedDate.getFullYear(); 
 }
 
-
 const AllProjects = ({allBugs, username, tabSelected}) => {
-
   const findCompletedBugs = (bugs) => {
     let filterBugs = bugs;
     let completeBugs = filterBugs.filter((bug) => bug.status === 'complete' && bug.assigned_to === username.value);
@@ -31,7 +29,7 @@ const AllProjects = ({allBugs, username, tabSelected}) => {
     )}
     </tbody>
     
-    {findCompletedBugs(allBugs) >= 1 ? <th><h3 className="complete-title">COMPLETE</h3></th> : null}
+    {findCompletedBugs(allBugs) >= 1 ? <tbody><tr><td><h3 className="complete-title">COMPLETE</h3></td></tr></tbody> : null}
 
     <tbody>
     {allBugs.filter((bug) => bug.assigned_to === username.value && tabSelected === "allprojects" && bug.status === 'complete').map((item, key) => (

@@ -14,6 +14,7 @@ const path = require('path');
 // Img Uploads
 const multer = require('multer');
 
+//Bug screenshot storage
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, 'uploads/')
@@ -23,8 +24,20 @@ const storage = multer.diskStorage({
       cb(null, file.fieldname + '-' + uniqueSuffix + '-' + file.originalname)
     }
 })
+//Profile avatar storage
+const profileStorage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'uploads/profile-images')
+    },
+    filename: function (req, file, cb) {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+      cb(null, file.fieldname + '-' + uniqueSuffix + '-' + file.originalname)
+    }
+})
   
+//Set storage location
 const upload = multer({ storage: storage });
+const profileUpload = multer({ storage: profileStorage });
 
 // Express JS
 const app = express();
@@ -32,13 +45,48 @@ app.use(express.json());
 
 const { auth: { token_secret } } = config;
 
+//  @desc   Upload profile image
+//  @route  POST /profile-img-upload
+//  @access Private
+app.post('/profile-img-upload', authenticateToken, upload.single('screenshot'), async (req, res) => {
+
+    //No Img
+    if(!req.file) return res.status(400).json({authenticated: true, error: 'No Img was found!'})
+
+    //Has Img
+    if(req.file) {
+        const url = req.protocol + '://' + req.get('host');
+        const imgDir = req.file.destination
+        const fullUrl = url + '/' + imgDir + req.file.filename;
+
+        try {
+            //Fix this for profile images
+
+            // const findBug = await Bug.updateOne(
+            //     { _id: req.body.id }, 
+            //     { $addToSet: { bug_img: fullUrl }  }
+            // )
+
+            res.status(200).json({
+                authenticated: true,
+                img: fullUrl
+
+            });
+        
+        } catch(err) {
+            console.log(err);
+        }
+    }
+});
+
+
 //  @desc   Upload images
 //  @route  POST /bug-img-upload
 //  @access Private
 app.post('/bug-img-upload', authenticateToken, upload.single('screenshot'), async (req, res) => {
 
     //No Img
-    if(!req.file) return res.status(400).json({aunthenticated: true, error: 'No Img was found!'})
+    if(!req.file) return res.status(400).json({authenticated: true, error: 'No Img was found!'})
 
     //Has Img
     if(req.file) {
@@ -112,7 +160,6 @@ app.get('/download-img/:id', authenticateToken, async(req, res) => {
 
 });
 
-
 //  @desc   Check login status
 //  @route  get /check-login-status
 //  @access Private
@@ -128,7 +175,13 @@ app.get("/check-login-status", authenticateToken, async (req, res) => {
 //  @route  POST /add_user
 //  @access Public
 app.post("/add_user",
-body('name').isLength({
+body('firstname').isLength({
+    min: 2
+}).withMessage('First Name must be at least 2 characters in length'),
+body('lastname').isLength({
+    min: 2
+}).withMessage('Last Name must be at least 2 characters in length'),
+body('username').isLength({
     min: 5
 }).withMessage('Username must be at least 5 characters in length'),
 
@@ -151,7 +204,8 @@ async (request, response) => {
   
     try {
         const user = new User(request.body);
-        const usercheck = await User.findOne({ name: user.name });
+        const username = user.username;
+        const usercheck = await User.findOne({ username: username });
 
         if(usercheck) {
             return response.status(400).json({
@@ -163,7 +217,7 @@ async (request, response) => {
             await user.save();
 
             // Set token with expiration of 1 hour
-            const accessToken = await jwt.sign({data: user.name, exp: Math.floor(Date.now() / 1000) + (60 * 60)}, token_secret);
+            const accessToken = await jwt.sign({data: username, exp: Math.floor(Date.now() / 1000) + (60 * 60)}, token_secret);
 
             response.status(200).json({
                 success: true,
@@ -184,18 +238,18 @@ async (request, response) => {
 app.post("/login_user", async (request, response) => {
 
     const user = new User(request.body);
-    const username = user.name;
+    const username = user.username;
     const password = user.password;
   
     try {
-        const usercheck = await User.findOne({ name: user.name });
+        const usercheck = await User.findOne({ username: user.username });
 
         if(usercheck) {
             let pw = usercheck.password;
             if(pw === password) {
 
                 // Set token with expiration of 1 hour
-                const accessToken = await jwt.sign({data: user.name, exp: Math.floor(Date.now() / 1000) + (60 * 60)}, token_secret);
+                const accessToken = await jwt.sign({data: username, exp: Math.floor(Date.now() / 1000) + (60 * 60)}, token_secret);
 
                 response.status(200).json({
                     success: true,
@@ -225,6 +279,27 @@ app.get("/users", authenticateToken, async (req, res) => {
         res.status(200).json({
             authenticated: true,
             users: users
+        });
+    } catch (error) {
+      res.status(500).send(error);
+    }
+});
+
+//  @desc   Get Current User
+//  @route  get /current-user
+//  @access Private
+app.get("/current-user", authenticateToken, async (req, res) => {
+    token = req.headers.authorization.split(' ')[1];
+
+    const userData = jwt.decode(token);
+    const username = userData.data;  
+
+    const user = await User.find({username: username});
+  
+    try {
+        res.status(200).json({
+            authenticated: true,
+            user: user
         });
     } catch (error) {
       res.status(500).send(error);
@@ -303,10 +378,11 @@ app.post('/create-project', authenticateToken, async (req, res) => {
 
     try {
         const projectName = req.body.project;
-        console.log('body: ', req.body)
+        console.log('auth passed!')
         token = req.headers.authorization.split(' ')[1];
 
         const userData = jwt.decode(token);
+        console.log(userData)
         const username = userData.data;
 
         const project = new Project({ 

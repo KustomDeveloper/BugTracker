@@ -167,6 +167,9 @@ table.status a {
   font-weight: 900;
   letter-spacing: 0.5px;
 }
+.cp-link {
+  cursor: pointer;
+}
 .projects {
   list-style: none;
   padding: 0;
@@ -210,6 +213,7 @@ table.status a {
   padding: 0;
   margin: 10px 15px;
   font-weight: 700;
+  text-transform: capitalize;
 }
 
 
@@ -726,12 +730,42 @@ label {
 
 /*Completed*/
 h3.complete-title {
-  font-weight: bold;
+  color: #a09d9d;
   display: block;
-  font-size: 16px;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 1px;
   margin-top: 50px;
 }
 
+/*Alert form errors*/
 .alert {
-  padding: 0;margin: 0;
+  padding: 0;
+  margin: 0;
+}
+
+/*Logout*/
+button.logout-btn {
+  z-index: 99999999;
+  color: #bfbaba;
+  position: absolute;
+  background: none;
+  border: none;
+  right: 0;
+  font-size: 13px;
+  top: 25px;
+  right: 5px;
+}
+
+/*Edit Profile*/
+.edit-profile h3 {
+  color: rgb(173, 168, 168);
+  font-size: 13px;
+}
+.settings a {
+  text-decoration: none;
+  color: #916095;
+}
+.settings a:hover {
+  color: #BC2551;
 }

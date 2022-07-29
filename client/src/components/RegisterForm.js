@@ -8,6 +8,8 @@ const RegisterForm = () => {
     const isLoggedIn = useSelector(state => state.auth);
     const dispatch = useDispatch(); 
     
+    const [firstname, setFirstname] = useState("");
+    const [lastname, setLastname] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [errors, setErrors] = useState([]);
@@ -22,8 +24,10 @@ const RegisterForm = () => {
         e.preventDefault();
 
         const formFields = {
-            name: username,
-            password: password
+            firstname,
+            lastname,
+            username,
+            password
         }
 
         const requestOptions = {
@@ -63,6 +67,20 @@ const RegisterForm = () => {
                 <div className="login register">
                     <h1>Register</h1>
                     <form onSubmit={handleFormSubmit}>
+                        <label>
+                        <i className="fa fa-user-o" aria-hidden="true"></i>
+                        </label>
+                        <input type="text" name="firstname" 
+                            value={firstname}
+                            onChange={e => setFirstname(e.target.value)}
+                            placeholder="First Name" id="firstname" required />
+                        <label>
+                        <i className="fa fa-user-o" aria-hidden="true"></i>
+                        </label>
+                        <input type="text" name="lastname" 
+                            value={lastname}
+                            onChange={e => setLastname(e.target.value)}
+                            placeholder="Last Name" id="lastname" required />
                         <label>
                         <i className="fa fa-user-o" aria-hidden="true"></i>
                         </label>

@@ -86,7 +86,7 @@ const CreateBug = ({showProjectForm, updateShowProjectForm, allUsers, updateAllU
                 <select className="form-control" value={assignTo} onChange={e => setAssignTo(e.target.value)} required>
                    <option id="option-empty-two" value="">Select person</option>
                    {allUsers.map((item, key) => (
-                    <option key={key} value={item.name}>{item.name}</option>
+                    <option key={key} value={item.username}>{item.username}</option>
                    ))}
                 </select>
             </div>

@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { logOutUser } from '../actions';
 import AllProjects from './AllProjects';
 import SelectedProject from './SelectedProject';
+import { Link } from 'react-router-dom';
 
 const Authorized = () => {
   const token = localStorage.getItem('token');
@@ -91,7 +92,7 @@ const Authorized = () => {
     today = today.toISOString();
     today = today.substr(0,10);
 
-    const myBugs = bugs.filter(bug => bug.assigned_to === username.value && bug.due_date.substr(0,10) < today);
+    const myBugs = bugs.filter(bug => bug.assigned_to === username.value && bug.due_date.substr(0,10) < today && bug.status != 'complete');
 
     return myBugs.length;
   }
@@ -101,19 +102,31 @@ const Authorized = () => {
     let today = new Date();
     today = today.toISOString();
     today = today.substr(0,10)
-    const myBugs = bugs.filter(bug => bug.assigned_to === username.value && bug.due_date.substr(0,10) === today);
+    const myBugs = bugs.filter(bug => bug.assigned_to === username.value && bug.due_date.substr(0,10) === today && bug.status != 'complete');
 
     return myBugs.length;
   }
 
+  const dueThisWeek = (bugs, username) => {
+    //Get the date value of next week.
+    var today = new Date();
+    const presentDay = Date.parse(new Date(today.getFullYear(), today.getMonth(), today.getDate()));
+    var nextWeek = Date.parse(new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7));
+
+    const thisWeek = bugs.filter(bug => new Date(bug.due_date).getTime() > nextWeek && username.value === bug.assigned_to && bug.status != 'complete'); 
+
+    console.log(thisWeek)
+
+  } 
+
 
   return(
- 
     <div className="dashboard row h-100">
+      {allBugs.length > 0 ? console.log(dueThisWeek(allBugs, username)) : null}
         
       <AddBug allUsers={allUsers} updateAllUsers={updateAllUsers} allProjects={allProjects} updateAllProjects={updateAllProjects}/>
       <div className="col col-md-3 col-left">
-        <Logo />
+        <Logo /> <button onClick={() => dispatch(logOutUser())} className="logout-btn"><i className="fa fa-sign-out" aria-hidden="true"></i> Logout</button>
         <h2>My Space</h2>
         <hr />
 
@@ -121,7 +134,7 @@ const Authorized = () => {
           <li className="selected"><i className="fa fa-tachometer" aria-hidden="true"></i> Dashboard</li>
         </ul>
 
-        <button className="settings">Settings</button>
+        <button className="settings"><Link to='/profile'>Settings</Link></button>
 
       </div>
       <div className="col col-md-3 col-mid"> 

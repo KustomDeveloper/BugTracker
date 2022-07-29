@@ -129,7 +129,7 @@ const Bug = () => {
                     <li className="selected"><i className="fa fa-bug" aria-hidden="true"></i> Bug</li>
                 </ul>
 
-                <button className="settings">Settings</button>
+                <button className="settings"> <Link to="/profile">Settings</Link></button>
 
             </div>
 

@@ -20,11 +20,8 @@ const EditBug = () => {
     const [bugImages, updateBugImages] = useState([]);
 
     const navigate = useNavigate();
-
     const dispatch = useDispatch(); 
-
     const token = localStorage.getItem('token');
-
     const { id } = useParams();
 
     //Get single bug
@@ -125,7 +122,6 @@ const EditBug = () => {
                 }
         
                 if(data.authenticated === true) {
-                    // console.log(data.message)
                 }
             });
 
@@ -278,7 +274,7 @@ const EditBug = () => {
                 <h3>Assigned To</h3>
                 <select className="assigned-to-select form-control" value={currentAssignee} onChange={e => saveAssignedTo(e)} >
                     {allUsers ? allUsers.map((item) => (
-                        <option key={item._id} value={item.name}>{item.name}</option>
+                        <option key={item._id} value={item.username}>{item.username}</option>
                     )) : null}
                 </select>
             </div>
