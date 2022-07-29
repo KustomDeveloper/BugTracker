@@ -189,6 +189,13 @@ body('password').isLength({
     min: 5
 }).withMessage("Password must be at least 5 characters in length"),
 
+body('email').isLength({
+    min: 5
+}).withMessage("Email must be at least 5 characters in length"),
+
+body('email').isEmail({
+}).withMessage("Please enter a valid email address"),
+
 async (request, response) => {
     const errors = validationResult(request);
 
@@ -205,12 +212,16 @@ async (request, response) => {
     try {
         const user = new User(request.body);
         const username = user.username;
-        const usercheck = await User.findOne({ username: username });
+        const email = user.email;
 
-        if(usercheck) {
+        //Check if username or email already exist
+        const usercheck = await User.findOne({ username: username });
+        const emailcheck = await User.findOne({ email: email });
+
+        if(usercheck || email) {
             return response.status(400).json({
                 success: false,
-                single_error: "Username already in use"
+                single_error: "Username or Email already in use"
             });
         } else {
 

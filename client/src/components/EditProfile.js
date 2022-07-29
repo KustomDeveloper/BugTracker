@@ -12,14 +12,13 @@ const EditProfile = () => {
     const [lastName, setLastname] = useState('');
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
-    const [currentUser, updateCurrentUser] = useState('');
 
     const navigate = useNavigate();
     const dispatch = useDispatch(); 
     const token = localStorage.getItem('token');
     const { id } = useParams();
 
-    //Get Users
+    //Get Current User
     useEffect(() => {
         const options = {
             method: 'GET',
@@ -28,14 +27,16 @@ const EditProfile = () => {
     
         fetch(`/current-user`, options)
         .then(response => response.json())
-        .then(data => { 
+        .then(data => {
             if(data.authenticated === false) {
                 dispatch(logOutUser());
             }
     
             if(data.authenticated === true) {
-                let user  = data.user;
-                updateCurrentUser(user[0]);
+                let user = data.user;
+
+                console.log(user)
+
                 setFirstname(user[0].firstname);
                 setLastname(user[0].lastname);
                 setUsername(user[0].username);

@@ -11,6 +11,7 @@ const RegisterForm = () => {
     const [firstname, setFirstname] = useState("");
     const [lastname, setLastname] = useState("");
     const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errors, setErrors] = useState([]);
 
@@ -27,6 +28,7 @@ const RegisterForm = () => {
             firstname,
             lastname,
             username,
+            email,
             password
         }
 
@@ -88,6 +90,13 @@ const RegisterForm = () => {
                             value={username}
                             onChange={e => setUsername(e.target.value)}
                             placeholder="Username" id="username" required />
+                        <label>
+                        <i className="fa fa-user-o" aria-hidden="true"></i>
+                        </label>
+                        <input type="email" name="email" 
+                            value={email}
+                            onChange={e => setEmail(e.target.value)}
+                            placeholder="Email" id="email" required />
 
                         <label>
                         <i className="fa fa-unlock-alt" aria-hidden="true"></i>
