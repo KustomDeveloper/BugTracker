@@ -218,7 +218,7 @@ async (request, response) => {
         const usercheck = await User.findOne({ username: username });
         const emailcheck = await User.findOne({ email: email });
 
-        if(usercheck || email) {
+        if(usercheck || emailcheck) {
             return response.status(400).json({
                 success: false,
                 single_error: "Username or Email already in use"
