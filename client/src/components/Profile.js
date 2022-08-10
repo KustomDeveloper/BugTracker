@@ -5,8 +5,10 @@ import { useParams } from "react-router-dom";
 import { Link, useNavigate } from "react-router-dom";
 import EditProfile from "./EditProfile";
 import Logo from "./Logo";
+import DefaultAvatar from "./DefaultAvatar";
 
 const Profile = () => {
+    const [avatar, setAvatar] = useState('');
     const isLoggedIn = useSelector(state => state.auth);
     const dispatch = useDispatch();
     const token = localStorage.getItem('token');
@@ -37,6 +39,58 @@ const Profile = () => {
        
     }, [setLoginStatus])
 
+    useEffect(() => {
+        //get avatar
+        const options = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json',  "Authorization" : `Bearer ${token}` },
+        };
+
+        fetch(`/profile-avatar/`, options)
+        .then(response => response.json())
+        .then(data => { 
+            if(data.authenticated === false) {
+                dispatch(logOutUser());
+            }
+    
+            if(data.authenticated === true) {
+                const avatar = data.userInfo.avatar;
+
+                setAvatar(avatar);
+            }
+            
+        });
+    }, [])
+
+    const deleteAvatar = (e) => {
+        e.preventDefault();
+
+        let isConfirmed = window.confirm("Are you sure you want to delete this Avatar?");
+ 
+            if(isConfirmed === true) {
+
+            const options = {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json',  "Authorization" : `Bearer ${token}` },
+                body: JSON.stringify({ avatar: avatar })
+            };
+        
+            fetch('/delete-avatar', options)
+            .then(response => response.json())
+            .then(data => { 
+                if(data.authenticated === false) {
+                    dispatch(logOutUser());
+                }
+        
+                if(data.authenticated === true) {
+                    window.location.reload(false);
+                }
+        
+            });
+        }
+
+    }
+
     const redirectToLoginForm = () => {
         navigate('/');
     }
@@ -59,15 +113,14 @@ const Profile = () => {
             </div>
 
             <div className="col col-md-3 col-mid bug-single-mid"> 
-
                 <h3 className="project-name-title">Edit your profile</h3>
-               
-
+                {avatar ? <div><img className='avatar-img' src={avatar} /><span onClick={e => deleteAvatar(e)} className='delete-avatar'><i className="fa fa-times-circle-o" aria-hidden="true"></i></span></div> : <DefaultAvatar /> }
+                
             </div>
 
             <div className="col col-md-6 col-right">
                 <div className="bug-card">
-                    {isLoggedIn === true ? <EditProfile /> : redirectToLoginForm()} 
+                    {isLoggedIn === true ? <EditProfile avatar={avatar} /> : redirectToLoginForm()} 
                 </div>
             </div>
         </div>

@@ -10,7 +10,6 @@ const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const path = require('path');
 
-
 // Img Uploads
 const multer = require('multer');
 
@@ -24,19 +23,22 @@ const storage = multer.diskStorage({
       cb(null, file.fieldname + '-' + uniqueSuffix + '-' + file.originalname)
     }
 })
+  
+//Set bug img storage location
+const upload = multer({ storage: storage });
+
 //Profile avatar storage
 const profileStorage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, 'uploads/profile-images')
+      cb(null, 'uploads/profile/')
     },
     filename: function (req, file, cb) {
       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
       cb(null, file.fieldname + '-' + uniqueSuffix + '-' + file.originalname)
     }
 })
-  
-//Set storage location
-const upload = multer({ storage: storage });
+
+//Set avatar storage location
 const profileUpload = multer({ storage: profileStorage });
 
 // Express JS
@@ -45,42 +47,8 @@ app.use(express.json());
 
 const { auth: { token_secret } } = config;
 
-//  @desc   Upload profile image
-//  @route  POST /profile-img-upload
-//  @access Private
-app.post('/profile-img-upload', authenticateToken, upload.single('screenshot'), async (req, res) => {
 
-    //No Img
-    if(!req.file) return res.status(400).json({authenticated: true, error: 'No Img was found!'})
-
-    //Has Img
-    if(req.file) {
-        const url = req.protocol + '://' + req.get('host');
-        const imgDir = req.file.destination
-        const fullUrl = url + '/' + imgDir + req.file.filename;
-
-        try {
-            //Fix this for profile images
-
-            // const findBug = await Bug.updateOne(
-            //     { _id: req.body.id }, 
-            //     { $addToSet: { bug_img: fullUrl }  }
-            // )
-
-            res.status(200).json({
-                authenticated: true,
-                img: fullUrl
-
-            });
-        
-        } catch(err) {
-            console.log(err);
-        }
-    }
-});
-
-
-//  @desc   Upload images
+//  @desc   Upload bug images
 //  @route  POST /bug-img-upload
 //  @access Private
 app.post('/bug-img-upload', authenticateToken, upload.single('screenshot'), async (req, res) => {
@@ -129,6 +97,27 @@ app.get("/bug-images/:id", authenticateToken, async (req, res) => {
 //  @route  delete /delete-screenshot
 //  @access Private
 app.delete("/delete-screenshot", authenticateToken, async (req, res) => {
+    const url = req.body.url;
+    const id = req.body.id;
+    const imgName = url.substring(url.lastIndexOf('/') + 1)
+    const filePath = __dirname + '\\' + 'uploads' + '\\' + imgName;
+
+    const deleteImg = await Bug.updateOne({_id: id }, {$pull: { bug_img:  url }} )
+
+    fs.unlink(filePath, (err) => {
+        if (err) throw err;
+        // if no error, file has been deleted successfully
+    });
+
+    res.status(200).json({
+        authenticated: true
+    });
+})
+
+//  @desc   Delete Profile Img
+//  @route  delete /delete-profile-img
+//  @access Private
+app.delete("/delete-profile-img", authenticateToken, async (req, res) => {
     const url = req.body.url;
     const id = req.body.id;
     const imgName = url.substring(url.lastIndexOf('/') + 1)
@@ -246,11 +235,12 @@ async (request, response) => {
 //  @desc   Login User
 //  @route  POST /login_user
 //  @access Public
-app.post("/login_user", async (request, response) => {
+app.post("/login_user", async (req, res) => {
 
-    const user = new User(request.body);
+    const user = new User(req.body);
     const username = user.username;
     const password = user.password;
+    console.log(req.body)
   
     try {
         const usercheck = await User.findOne({ username: user.username });
@@ -262,21 +252,21 @@ app.post("/login_user", async (request, response) => {
                 // Set token with expiration of 1 hour
                 const accessToken = await jwt.sign({data: username, exp: Math.floor(Date.now() / 1000) + (60 * 60)}, token_secret);
 
-                response.status(200).json({
+                res.status(200).json({
                     success: true,
                     accessToken
                 });
             } else {
-                response.send({"error" : "Incorrect username or password" });
+                res.send({"error" : "Incorrect username or password" });
             }
           
         } else {
-            response.send({"error" : "Incorrect username or password" });
+            res.send({"error" : "Incorrect username or password" });
         }
   
 
     } catch (error) {
-      response.status(500).send(error);
+      res.status(500).send(error);
     }
 });
 
@@ -660,6 +650,153 @@ app.delete('/delete-bug/', authenticateToken, async (req, res) => {
         console.log(err);
     }
 });
+
+/*
+*  Edit Profile Routes
+*/
+
+//  @desc   Update Profile First Name
+//  @route  PUT /update-profile-firstname
+//  @access Private
+app.put('/update-profile-firstname/', authenticateToken, async (req, res) => {
+    const firstName = req.body.firstName;
+    token = req.headers.authorization.split(' ')[1];
+    const userData = jwt.decode(token);
+    const username = userData.data;
+
+    try {
+        await User.updateOne({ username: username }, { firstname: firstName });
+
+        res.status(200).json({
+            authenticated: true,
+            message: "First Name Updated."
+        });
+                
+    } catch(err) {
+        console.log(err);
+    }
+
+});
+
+//  @desc   Update Profile Last Name
+//  @route  PUT /update-profile-lastname
+//  @access Private
+app.put('/update-profile-lastname/', authenticateToken, async (req, res) => {
+    const lastName = req.body.lastName;
+    token = req.headers.authorization.split(' ')[1];
+    const userData = jwt.decode(token);
+    const username = userData.data;
+
+    try {
+        await User.updateOne({ username: username }, { lastname: lastName });
+
+        res.status(200).json({
+            authenticated: true,
+            message: "Last Name Updated."
+        });
+                
+    } catch(err) {
+        console.log(err);
+    }
+
+});
+
+//  @desc   Delete Profile
+//  @route  DELETE /delete-profile
+//  @access Private
+app.delete('/delete-profile/', authenticateToken, async (req, res) => {
+    const username = req.body.username;
+
+    try {
+        await User.deleteOne({ username: username });
+
+        res.status(200).json({
+            authenticated: true,
+            message: "Profile deleted."
+        });
+                
+    } catch(err) {
+        console.log(err);
+    }
+});
+
+//  @desc   Upload profile image
+//  @route  POST /profile-img-upload
+//  @access Private
+app.post('/profile-img-upload', authenticateToken, profileUpload.single('avatar'), async (req, res) => {
+
+    token = req.headers.authorization.split(' ')[1];
+    const userData = jwt.decode(token);
+    const username = userData.data;
+
+    //No Img
+    if(!req.file) return res.status(400).json({authenticated: true, error: 'No Img was found!'})
+
+    console.log(username)
+
+    //Has Img
+    if(req.file) {
+        const url = req.protocol + '://' + req.get('host');
+        const imgDir = req.file.destination
+        const fullUrl = url + '/' + imgDir + req.file.filename;
+        
+        try {
+            const findAvatar = await User.updateOne(
+                { username: username }, { avatar: fullUrl } 
+            )
+
+            res.status(200).json({
+                authenticated: true,
+                img: fullUrl
+            });
+        
+        } catch(err) {
+            console.log(err);
+        }
+    }
+});
+
+//  @desc   Get Avatar 
+//  @route  get /bug-images
+//  @access Private
+app.get("/profile-avatar/", authenticateToken, async (req, res) => {
+
+    token = req.headers.authorization.split(' ')[1];
+    const userData = jwt.decode(token);
+    const username = userData.data;
+
+    const user = await User.findOne({ username: username });
+
+    res.status(200).json({
+        authenticated: true,
+        userInfo: user, 
+    });
+
+});
+
+//  @desc   Delete Avatar
+//  @route  delete /delete-avatar
+//  @access Private
+app.delete("/delete-avatar", authenticateToken, async (req, res) => {
+    token = req.headers.authorization.split(' ')[1];
+    const userData = jwt.decode(token);
+    const username = userData.data;
+
+    const url = req.body.avatar;
+    const imgName = url.substring(url.lastIndexOf('/') + 1)
+    const filePath = __dirname + '\\' + 'uploads' + '\\' + 'profile' + '\\' + imgName;
+
+    const deleteAvatar = await User.updateOne({username: username }, { avatar: '' } )
+
+    fs.unlink(filePath, (err) => {
+        if (err) throw err;
+        // if no error, file has been deleted successfully
+    });
+
+    res.status(200).json({
+        authenticated: true
+    });
+})
 
 
 

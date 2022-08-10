@@ -16,7 +16,7 @@ const ProfileDropZone = () => {
 
         data.append('id', id);
         data.append('path', acceptedFiles[0].path);
-        data.append('screenshot', acceptedFiles[0]);
+        data.append('avatar', acceptedFiles[0]);
 
         // Do something with the files
         const options = {
@@ -70,7 +70,7 @@ const ProfileDropZone = () => {
 
   return (
     <div className="dropzone" {...getRootProps()}>
-      <input name="screenshot" {...getInputProps()} />
+      <input name="avatar" {...getInputProps()} />
       {
         isDragActive ?
           <p className="dropzone-text">Drop it like it's hot!</p> :

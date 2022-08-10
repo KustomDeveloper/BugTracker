@@ -26,7 +26,7 @@ const LoginForm = () => {
             method: 'post',
             url: '/login_user',
             data: {
-                name: username,
+                username: username,
                 password: password
             }
         })
