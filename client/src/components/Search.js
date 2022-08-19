@@ -42,7 +42,7 @@ const Search = () => {
     </form>
 
     <ul className="search-dropdown" style={{padding: keyword && '10px 0'}}>
-        {keyword && myBugs.filter(bugs=>bugs.bug_name.toLowerCase().includes(keyword)).map((item) => (
+        {keyword && myBugs.filter(bugs=>bugs.bug_name.toLowerCase().includes(keyword) || bugs.bug_description.toLowerCase().includes(keyword)).map((item) => (
             <li key={item._id} className="bug-list-item">
                 <Link to={'/bug/' + item._id}>{item.bug_name}</Link>
             </li>

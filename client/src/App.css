@@ -580,6 +580,9 @@ a.cp-link {
   color: rgb(173, 168, 168);
   font-size: 13px;
 }
+.bug-edit-form textarea {
+  min-height: 200px !important;
+}
 .edit-project-selector {
   -webkit-appearance: none;
   -moz-appearance: none;
