@@ -3,7 +3,7 @@ import { logOutUser } from '../actions';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-const Search = ({ allBugs, username }) => {
+const Search = () => {
     const [keyword, setKeyword] = useState('');
     const [myBugs, setMyBugs] = useState([]);
 

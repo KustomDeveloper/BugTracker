@@ -125,7 +125,7 @@ const Authorized = () => {
 
       </div>
       <div className="col col-md-3 col-mid"> 
-        <div className="search-container"><Search allBugs={allBugs} username={username} /></div>
+        <div className="search-container"><Search /></div>
         <hr/>
         <h3>PROJECTS</h3>
         <ul className="projects">
