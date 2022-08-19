@@ -56,7 +56,6 @@ const Authorized = () => {
         if(data.authenticated === true) {
             updateAllBugs(data.bugs);
         }
-
     });
     
   }, [])
@@ -122,8 +121,8 @@ const Authorized = () => {
         </ul>
 
         <button className="settings"><Link to='/profile'>Settings</Link></button>
-
       </div>
+
       <div className="col col-md-3 col-mid"> 
         <div className="search-container"><Search /></div>
         <hr/>
@@ -136,7 +135,6 @@ const Authorized = () => {
             : null }
             </ul>
         </ul>
-
       </div>
 
       <div className="col col-md-6 col-right">
@@ -146,7 +144,6 @@ const Authorized = () => {
           <div className="grid-item open-bugs"><span className="count">{allBugs.length > 0 ? countAllBugs(allBugs, username) : '0' }</span>Total Bugs</div>
           <div className="grid-item overdue-bugs"><span className="count">{allBugs.length > 0 ?  overdueBugs(allBugs, username) : '0' }</span>Overdue</div>
           <div className="grid-item due-today"><span className="count">{allBugs.length > 0 ?  dueTodayBugs(allBugs, username) : '0' }</span>Due Today</div>
-          {/* <div className="grid-item due-in-a-week"><span className="count">08</span>Due this week</div> */}
         </div>
         <hr />
 
@@ -160,12 +157,10 @@ const Authorized = () => {
             </tr>
           </thead>
          
-
             {tabSelected === "allprojects" && allBugs.length >= 1 ? <AllProjects allBugs={allBugs} username={username} tabSelected={tabSelected} /> : null }
 
             {tabSelected === tabSelected && allBugs.length >= 1 ? <SelectedProject allBugs={allBugs} username={username} tabSelected={tabSelected}  /> : null }
 
-    
         </table>
       </div>
 
