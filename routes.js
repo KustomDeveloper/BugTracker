@@ -732,8 +732,6 @@ app.post('/profile-img-upload', authenticateToken, profileUpload.single('avatar'
     //No Img
     if(!req.file) return res.status(400).json({authenticated: true, error: 'No Img was found!'})
 
-    console.log(username)
-
     //Has Img
     if(req.file) {
         const url = req.protocol + '://' + req.get('host');
@@ -797,6 +795,29 @@ app.delete("/delete-avatar", authenticateToken, async (req, res) => {
         authenticated: true
     });
 })
+
+//  @desc   Show Users Bugs
+//  @route  get /users-bugs
+//  @access Private
+app.get("/users-bugs", authenticateToken, async (req, res) => {
+
+    try {
+        token = req.headers.authorization.split(' ')[1];
+
+        const userData = jwt.decode(token);
+        const username = userData.data;  
+
+        const bugs = await Bug.find({assigned_to: username});
+
+        res.status(200).json({
+            authenticated: true,
+            bugs
+        });
+      
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
 
 
 

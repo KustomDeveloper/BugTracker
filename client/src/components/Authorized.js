@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { logOutUser } from '../actions';
 import AllProjects from './AllProjects';
 import SelectedProject from './SelectedProject';
+import Search from './Search';
 import { Link } from 'react-router-dom';
 
 const Authorized = () => {
@@ -16,7 +17,7 @@ const Authorized = () => {
   const [tabSelected, updateTabSelected] = useState("allprojects");
   const [allProjects, updateAllProjects] = useState("");
   const [allUsers, updateAllUsers] = useState("");
-  const [allBugs, updateAllBugs] = useState("");
+  const [allBugs, updateAllBugs] = useState([]);
 
 
   useEffect(() => {
@@ -107,22 +108,8 @@ const Authorized = () => {
     return myBugs.length;
   }
 
-  const dueThisWeek = (bugs, username) => {
-    //Get the date value of next week.
-    var today = new Date();
-    const presentDay = Date.parse(new Date(today.getFullYear(), today.getMonth(), today.getDate()));
-    var nextWeek = Date.parse(new Date(today.getFullYear(), today.getMonth(), today.getDate() + 7));
-
-    const thisWeek = bugs.filter(bug => new Date(bug.due_date).getTime() > nextWeek && username.value === bug.assigned_to && bug.status != 'complete'); 
-
-    console.log(thisWeek)
-
-  } 
-
-
   return(
     <div className="dashboard row h-100">
-      {allBugs.length > 0 ? console.log(dueThisWeek(allBugs, username)) : null}
         
       <AddBug allUsers={allUsers} updateAllUsers={updateAllUsers} allProjects={allProjects} updateAllProjects={updateAllProjects}/>
       <div className="col col-md-3 col-left">
@@ -138,7 +125,7 @@ const Authorized = () => {
 
       </div>
       <div className="col col-md-3 col-mid"> 
-        <input className="search" type="search" placeholder="Search by name, Bugs or Other" />
+        <div className="search-container"><Search allBugs={allBugs} username={username} /></div>
         <hr/>
         <h3>PROJECTS</h3>
         <ul className="projects">
