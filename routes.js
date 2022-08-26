@@ -206,12 +206,6 @@ async (request, response) => {
         //Check if username or email already exist
         const usercheck = await User.findOne({ username: username });
         const emailcheck = await User.findOne({ email: email });
-        // const usercheck = await User.findOne({ username: username }, (err, data) => {
-        //     err ? console.log(err) : console.log(data)
-        // });
-        // const emailcheck = await User.findOne({ email: email }, (err, data) => {
-        //     err ? console.log(err) : console.log(data)
-        // });
 
         if(usercheck || emailcheck) {
             return response.status(400).json({
