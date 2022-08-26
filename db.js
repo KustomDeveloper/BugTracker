@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
 const config = require('./config');
 
-const { db: { host, port, name } } = config;
-const connectionString = `mongodb://${host}:${port}/${name}`;
+const { cloud_db: { username, password } } = config;
+const { local_db: { host, port, name } } = config;
+// const connectionString = `mongodb://${host}:${port}/${name}`;
+const connectionString = `mongodb+srv://${username}:${password}@bugtracker.f6fm60i.mongodb.net/?retryWrites=true&w=majority`;
 
 mongoose.connect(connectionString,  {
     useNewUrlParser: true,

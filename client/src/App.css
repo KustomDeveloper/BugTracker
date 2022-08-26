@@ -117,6 +117,10 @@ body {
   width: 100%;
   text-align: center;
 }
+.register .alert {
+  padding: 0;
+  margin-bottom: 0;
+}
 
 .success {
   color: green;

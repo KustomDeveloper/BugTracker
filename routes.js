@@ -206,6 +206,12 @@ async (request, response) => {
         //Check if username or email already exist
         const usercheck = await User.findOne({ username: username });
         const emailcheck = await User.findOne({ email: email });
+        // const usercheck = await User.findOne({ username: username }, (err, data) => {
+        //     err ? console.log(err) : console.log(data)
+        // });
+        // const emailcheck = await User.findOne({ email: email }, (err, data) => {
+        //     err ? console.log(err) : console.log(data)
+        // });
 
         if(usercheck || emailcheck) {
             return response.status(400).json({
@@ -227,7 +233,8 @@ async (request, response) => {
   
 
     } catch (error) {
-      response.status(500).send(error);
+    //   response.status(500).send(error);
+      console.log(error)
     }
 });
 
@@ -236,11 +243,9 @@ async (request, response) => {
 //  @route  POST /login_user
 //  @access Public
 app.post("/login_user", async (req, res) => {
-
     const user = new User(req.body);
     const username = user.username;
     const password = user.password;
-    console.log(req.body)
   
     try {
         const usercheck = await User.findOne({ username: user.username });
