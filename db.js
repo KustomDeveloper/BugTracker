@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
-const config = require('./config');
+// const config = require('./config');
 require('dotenv').config();
 const path = require('path');
 
 
-const { local_db: { host, port, name } } = config;
+// const { local_db: { host, port, name } } = config;
 // const connectionString = `mongodb://${host}:${port}/${name}`;
 
 const connectionString = process.env.MONGO_URI;
