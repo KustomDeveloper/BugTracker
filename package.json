@@ -1,6 +1,9 @@
 {
   "name": "bugtracker",
   "version": "1.0.0",
+  "engines": {
+    "node": "16.13.1"
+  },
   "description": "For tracking bugs during development",
   "main": "index.js",
   "scripts": {
