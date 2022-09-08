@@ -15,15 +15,15 @@ import Profile from './components/Profile';
 class App extends Component {
   render() {
     return (
-      <BrowserRouter>
-        <Routes>
-            <Route path="/" element={<Home />} exact />
-            <Route path="/register" element={<Register />} exact />
-            <Route path="/dashboard" element={<Dashboard />} exact />
-            <Route path='/bug/:id' element={<Bug />} />
-            <Route path='/profile' element={<Profile/>} exact />
-        </Routes>
-      </BrowserRouter>
+        <BrowserRouter>
+          <Routes>
+              <Route path="/" element={<Home />} exact />
+              <Route path="/register" element={<Register />} exact />
+              <Route path="/dashboard" element={<Dashboard />} exact />
+              <Route path='/bug/:id' element={<Bug />} />
+              <Route path='/profile' element={<Profile/>} exact />
+          </Routes>
+        </BrowserRouter>
     );
   }
 }

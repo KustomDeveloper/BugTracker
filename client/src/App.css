@@ -138,7 +138,7 @@ table.status th {
 }
 table.status td {
   padding: 8px;
-  font-size:15px;
+  font-size:14px;
   color: #000;
 }
 table.status th h3 {
@@ -862,4 +862,34 @@ div > .delete-profile {
   top: 27px;
   right: 10px;
   cursor: pointer;
+}
+
+
+@media only screen and (max-width: 1199px) {
+  body {
+    overflow-y: scroll;
+  }
+  .col.col-md-6.col-right {
+    overflow-y: auto !important;  
+  }
+  .col-md-3, .col-md-6, .col {
+    width: 100% !important;
+    display: block !important;
+  }
+  .col {
+    height: auto;
+  }
+  .settings {
+    position: relative;
+  }
+  .submit-bug {
+    border-radius: 0;
+    position: relative;
+    right: 0;
+    top: 0;
+    max-width: 100% !important;
+  }
+  .search, .search-form {
+    width: 100%;
+  }
 }

@@ -1,5 +1,5 @@
 const express = require('express');
-const config = require('./config');
+require('dotenv');
 const mongoose = require('mongoose');
 const database = require("./db");
 const Router = require('./routes');
@@ -12,4 +12,4 @@ app.use(express.json());
 app.use(Router);
 app.use('/uploads', express.static(__dirname + '/uploads'))
 
-app.listen(config.app.port);
+app.listen(process.env.PORT);

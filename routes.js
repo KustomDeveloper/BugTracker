@@ -2,7 +2,7 @@ const express = require("express");
 const User = require("./models/User");
 const Bug = require("./models/Bug");
 const Project = require("./models/Project");
-const config = require('./config');
+
 const authenticateToken =  require('./AuthMiddleware');
 const { body, validationResult } = require('express-validator');
 const bodyParser = require('body-parser');
@@ -45,7 +45,7 @@ const profileUpload = multer({ storage: profileStorage });
 const app = express();
 app.use(express.json());
 
-const { auth: { token_secret } } = config;
+const auth = process.env.TOKEN_SECRET;
 
 
 //  @desc   Upload bug images
@@ -217,7 +217,7 @@ async (request, response) => {
             await user.save();
 
             // Set token with expiration of 1 hour
-            const accessToken = await jwt.sign({data: username, exp: Math.floor(Date.now() / 1000) + (60 * 60)}, token_secret);
+            const accessToken = await jwt.sign({data: username, exp: Math.floor(Date.now() / 1000) + (60 * 60)}, auth);
 
             response.status(200).json({
                 success: true,
@@ -249,7 +249,7 @@ app.post("/login_user", async (req, res) => {
             if(pw === password) {
 
                 // Set token with expiration of 1 hour
-                const accessToken = await jwt.sign({data: username, exp: Math.floor(Date.now() / 1000) + (60 * 60)}, token_secret);
+                const accessToken = await jwt.sign({data: username, exp: Math.floor(Date.now() / 1000) + (60 * 60)}, auth);
 
                 res.status(200).json({
                     success: true,
@@ -378,11 +378,9 @@ app.post('/create-project', authenticateToken, async (req, res) => {
 
     try {
         const projectName = req.body.project;
-        console.log('auth passed!')
         token = req.headers.authorization.split(' ')[1];
 
         const userData = jwt.decode(token);
-        console.log(userData)
         const username = userData.data;
 
         const project = new Project({ 
@@ -531,7 +529,6 @@ app.put('/update-bug-title/', authenticateToken, async (req, res) => {
 //  @access Private
 app.put('/update-bug-assigned-to/', authenticateToken, async (req, res) => {
     const bugAssignedTo = req.body.assigned_to;
-    console.log(bugAssignedTo)
     const id = req.body.id;
 
     try {

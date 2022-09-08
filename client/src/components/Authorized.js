@@ -108,6 +108,7 @@ const Authorized = () => {
   }
 
   return(
+    <div className="container-fluid">
     <div className="dashboard row h-100">
         
       <AddBug allUsers={allUsers} updateAllUsers={updateAllUsers} allProjects={allProjects} updateAllProjects={updateAllProjects}/>
@@ -164,6 +165,7 @@ const Authorized = () => {
         </table>
       </div>
 
+    </div>
     </div>
   )
 }

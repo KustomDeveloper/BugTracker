@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
-const config = require('./config');
+require('dotenv');
 
-const { auth: { token_secret } } = config;
+const auth = process.env.TOKEN_SECRET;
 
 function authenticateToken(req, res, next) {
   let token;
@@ -9,7 +9,7 @@ function authenticateToken(req, res, next) {
   if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
     try {
       token = req.headers.authorization.split(' ')[1]
-      jwt.verify(token, token_secret, (err) => {
+      jwt.verify(token, auth, (err) => {
         if (err) {
           console.log(err)
           return res.status(403).json({
