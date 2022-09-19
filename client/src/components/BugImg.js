@@ -72,8 +72,6 @@ const BugImg = ({bugId}) => {
     const downloadImg = (e) => {
         const href = e.target.getAttribute('img-data');
         var img = href.split('/').pop();
-        console.log(img)
-
 
         const options = {
             method: 'GET',
@@ -91,6 +89,7 @@ const BugImg = ({bugId}) => {
             a.click();  
             a.remove();
         });
+ 
     }
  
     return(

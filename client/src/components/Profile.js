@@ -56,6 +56,8 @@ const Profile = () => {
             if(data.authenticated === true) {
                 const avatar = data.userInfo.avatar;
 
+                console.log(avatar)
+
                 setAvatar(avatar);
             }
             
@@ -74,6 +76,8 @@ const Profile = () => {
                 headers: { 'Content-Type': 'application/json',  "Authorization" : `Bearer ${token}` },
                 body: JSON.stringify({ avatar: avatar })
             };
+
+            console.log(avatar)
         
             fetch('/delete-avatar', options)
             .then(response => response.json())

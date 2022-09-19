@@ -892,4 +892,53 @@ div > .delete-profile {
   .search, .search-form {
     width: 100%;
   }
+
+}
+
+
+@media only screen and (max-width: 767px) {
+  .dashboard.row {
+    display: block;
+    margin: 0;
+    padding: 0;
+  }
+  .col.col-md-3.col-mid.bug-single-mid {
+    padding: 15px 25px;
+  }
+  #root .container-fluid {
+    margin: 0;
+    padding: 0;
+  }
+  .col-left h2 {
+    margin: 0;
+    text-indent: -9999px;
+  }
+  .col-left hr {
+    display: none;
+  }
+  .col.col-md-3.col-mid ul {
+    margin-bottom: 0;
+  }
+  .popup {
+    top: 50px;
+    left: 0;
+    margin-left: 0;
+    z-index:99999999999;
+  }
+  body {
+    background-color: #fff !important;
+  }
+  button.logout-btn {
+    z-index: 9;
+    display: block;
+    right: unset;
+    top: 22px;
+    position: relative;
+    float: right;
+    right: 0;
+  }
+  .projects {
+    padding-bottom: 5px;
+  }
+
 }

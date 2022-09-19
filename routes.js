@@ -9,37 +9,28 @@ const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const path = require('path');
+const { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } = require("@aws-sdk/client-s3");
+const { makeId } = require("./utils");
+
+const awsBucketName = process.env.AWS_BUCKET_NAME;
+const awsBucketRegion = process.env.AWS_BUCKET_REGION;
+const awsAccessKey = process.env.AWS_ACCESS_KEY;
+const awsSecretKey = process.env.AWS_SECRET_KEY;
+
+const s3 = new S3Client({
+    credentials: {
+        accessKeyId: awsAccessKey,
+        secretAccessKey: awsSecretKey,
+    },
+    region: awsBucketRegion
+});
 
 // Img Uploads
 const multer = require('multer');
 
-//Bug screenshot storage
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, 'uploads/')
-    },
-    filename: function (req, file, cb) {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-      cb(null, file.fieldname + '-' + uniqueSuffix + '-' + file.originalname)
-    }
-})
-  
-//Set bug img storage location
+const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-//Profile avatar storage
-const profileStorage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, 'uploads/profile/')
-    },
-    filename: function (req, file, cb) {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-      cb(null, file.fieldname + '-' + uniqueSuffix + '-' + file.originalname)
-    }
-})
-
-//Set avatar storage location
-const profileUpload = multer({ storage: profileStorage });
 
 // Express JS
 const app = express();
@@ -58,11 +49,19 @@ app.post('/bug-img-upload', authenticateToken, upload.single('screenshot'), asyn
 
     //Has Img
     if(req.file) {
-        const url = req.protocol + '://' + req.get('host');
-        const imgDir = req.file.destination
-        const fullUrl = url + '/' + imgDir + req.file.filename;
 
         try {
+            const params = {
+                Bucket: awsBucketName,
+                Key: req.file.fieldname + "-" + makeId(15) + "-" + req.file.originalname,
+                Body: req.file.buffer,
+                ContentType: req.file.mimetype
+            }
+    
+            const command = new PutObjectCommand(params);   
+            await s3.send(command);
+
+            const fullUrl = process.env.AWS_IMG_URI + params.Key;
             const findBug = await Bug.updateOne(
                 { _id: req.body.id }, 
                 { $addToSet: { bug_img: fullUrl }  }
@@ -99,15 +98,18 @@ app.get("/bug-images/:id", authenticateToken, async (req, res) => {
 app.delete("/delete-screenshot", authenticateToken, async (req, res) => {
     const url = req.body.url;
     const id = req.body.id;
-    const imgName = url.substring(url.lastIndexOf('/') + 1)
-    const filePath = __dirname + '\\' + 'uploads' + '\\' + imgName;
+    const imgName = url
+
+    const params = {
+        Bucket: awsBucketName,
+        Key: imgName
+    }
+
+    //Delete from Amazon s3
+    const command = new DeleteObjectCommand(params);
+    await s3.send(command);
 
     const deleteImg = await Bug.updateOne({_id: id }, {$pull: { bug_img:  url }} )
-
-    fs.unlink(filePath, (err) => {
-        if (err) throw err;
-        // if no error, file has been deleted successfully
-    });
 
     res.status(200).json({
         authenticated: true
@@ -120,15 +122,19 @@ app.delete("/delete-screenshot", authenticateToken, async (req, res) => {
 app.delete("/delete-profile-img", authenticateToken, async (req, res) => {
     const url = req.body.url;
     const id = req.body.id;
-    const imgName = url.substring(url.lastIndexOf('/') + 1)
-    const filePath = __dirname + '\\' + 'uploads' + '\\' + imgName;
+    const imgName = url;
 
+    const params = {
+        Bucket: awsBucketName,
+        Key: imgName
+    }
+
+    //Delete from Amazon s3
+    const command = new DeleteObjectCommand(params);
+    await s3.send(command);
+
+    //Delete from Database
     const deleteImg = await Bug.updateOne({_id: id }, {$pull: { bug_img:  url }} )
-
-    fs.unlink(filePath, (err) => {
-        if (err) throw err;
-        // if no error, file has been deleted successfully
-    });
 
     res.status(200).json({
         authenticated: true
@@ -140,13 +146,23 @@ app.delete("/delete-profile-img", authenticateToken, async (req, res) => {
 //  @access Private
 app.get('/download-img/:id', authenticateToken, async(req, res) => {
     const imgUrl = req.params.id;
-    const file = path.join(__dirname, `uploads/${imgUrl}`);
 
-    res.download(file, imgUrl, (err) => {
-        if(err)
-        console.log('error: ', err);
-    })
+    try {
+        const getObjectParams = {
+            Bucket: awsBucketName,
+            Key: imgUrl,
+        }
 
+        res.attachment(imgUrl)
+
+        const command = new GetObjectCommand(getObjectParams);
+        const fileStream = await s3.send(command);
+
+        fileStream.Body.pipe(res);
+        
+    } catch (err) {
+        console.log(err)
+    }
 });
 
 //  @desc   Check login status
@@ -719,7 +735,7 @@ app.delete('/delete-profile/', authenticateToken, async (req, res) => {
 //  @desc   Upload profile image
 //  @route  POST /profile-img-upload
 //  @access Private
-app.post('/profile-img-upload', authenticateToken, profileUpload.single('avatar'), async (req, res) => {
+app.post('/profile-img-upload', authenticateToken, upload.single('avatar'), async (req, res) => {
 
     token = req.headers.authorization.split(' ')[1];
     const userData = jwt.decode(token);
@@ -730,13 +746,21 @@ app.post('/profile-img-upload', authenticateToken, profileUpload.single('avatar'
 
     //Has Img
     if(req.file) {
-        const url = req.protocol + '://' + req.get('host');
-        const imgDir = req.file.destination
-        const fullUrl = url + '/' + imgDir + req.file.filename;
-        
+        const fullUrl = req.file.filename;
+
         try {
+            const params = {
+                Bucket: awsBucketName,
+                Key: req.file.fieldname + "-" + makeId(15) + "-" + req.file.originalname,
+                Body: req.file.buffer,
+                ContentType: req.file.mimetype
+            }
+    
+            const command = new PutObjectCommand(params);   
+            await s3.send(command);
+
             const findAvatar = await User.updateOne(
-                { username: username }, { avatar: fullUrl } 
+                { username: username }, { avatar: `https://${awsBucketName}.s3.amazonaws.com/${params.Key}` } 
             )
 
             res.status(200).json({
@@ -759,6 +783,8 @@ app.get("/profile-avatar/", authenticateToken, async (req, res) => {
     const userData = jwt.decode(token);
     const username = userData.data;
 
+    // console.log(req)
+
     const user = await User.findOne({ username: username });
 
     res.status(200).json({
@@ -777,19 +803,23 @@ app.delete("/delete-avatar", authenticateToken, async (req, res) => {
     const username = userData.data;
 
     const url = req.body.avatar;
-    const imgName = url.substring(url.lastIndexOf('/') + 1)
-    const filePath = __dirname + '\\' + 'uploads' + '\\' + 'profile' + '\\' + imgName;
+
+    const params = {
+        Bucket: awsBucketName,
+        Key: url
+    }
+
+    //Delete from Amazon s3
+    const command = new DeleteObjectCommand(params);
+    await s3.send(command);
 
     const deleteAvatar = await User.updateOne({username: username }, { avatar: '' } )
 
-    fs.unlink(filePath, (err) => {
-        if (err) throw err;
-        // if no error, file has been deleted successfully
-    });
-
+ 
     res.status(200).json({
         authenticated: true
     });
+
 })
 
 //  @desc   Show Users Bugs
