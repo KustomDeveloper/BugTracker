@@ -8,6 +8,7 @@ const { body, validationResult } = require('express-validator');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
+const path = require('path');
 const { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } = require("@aws-sdk/client-s3");
 const { makeId } = require("./utils");
 
@@ -36,7 +37,6 @@ const app = express();
 app.use(express.json());
 
 const auth = process.env.TOKEN_SECRET;
-
 
 //  @desc   Upload bug images
 //  @route  POST /bug-img-upload
